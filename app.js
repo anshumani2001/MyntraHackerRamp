@@ -31,7 +31,14 @@ app.get('/posts', (req, res) => {
 });
 
 app.get('/posts/new', (req, res) => {
-    res.send('To render new post form');
+    res.render('posts/new.ejs')
+})
+// app.post('/posts/new', (req, res) => {
+//     res.send(req.body);
+// })
+app.post('/posts', (req, res) => {  //Post Req
+    res.send(req.body);
+    // res.send('Post request after creating a <post>');
 })
 
 app.get('/posts/:id', async (req, res,) => {
@@ -42,9 +49,6 @@ app.get('/posts/:id/edit', async (req, res) => {
     res.send('edit form');
 })
 
-app.post('/posts', (req, res) => {  //Post Req
-    res.send('Post request after creating a <post>');
-})
 app.put('/posts', (req, res) => { //EDIT
     res.send("For Making Edit Post  Request");
 })
