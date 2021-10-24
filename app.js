@@ -1,20 +1,21 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+const post = require('./models/post');
 const methodOverride = require('method-override');
 const ExpressError = require('./utils/ExpressError');
 const ejsMate = require('ejs-mate'); 
 
 
 const app=express();
-/*const dbUrl='mongodb://localhost:27017/hackercamp';
+const dbUrl='mongodb://localhost:27017/hackercamp';
 mongoose.connect(dbUrl, { useNewUrlParser: true });
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, 'connetion error'));
 db.once('open', () => {
     console.log('database connected');
-})*/
+})
 app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
@@ -36,8 +37,14 @@ app.get('/posts/new', (req, res) => {
 // app.post('/posts/new', (req, res) => {
 //     res.send(req.body);
 // })
-app.post('/posts', (req, res) => {  //Post Req
-    res.send(req.body);
+app.post('/posts', async(req, res) => {  //Post Req
+    const { description, images } = req.body;
+    console.log(description, images)
+    const newPost = new post({ description, images });
+    console.log(newPost);
+    await newPost.save();
+    res.redirect('/')
+    // res.send(req.body);
     // res.send('Post request after creating a <post>');
 })
 

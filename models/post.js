@@ -14,7 +14,7 @@ ImageSchema.virtual('thumbnail').get(function () {
 const opts = { toJSON: { virtuals: true } };
 
 const PostSchema = new Schema({
-    images: [ImageSchema],
+    images: [{ type: String }],
     description: String,
     author: {
         type: Schema.Types.ObjectId,
@@ -29,15 +29,13 @@ const PostSchema = new Schema({
         default: 0
     },
     likes:[{
-                type: Schema.Types.ObjectId,
-                ref: 'User'
+            type: Schema.Types.ObjectId,
+            ref: 'User'
     }],
-    comments: [
-        {
+    comments: [{
             type: Schema.Types.ObjectId,
             ref: 'comment'
-        }
-    ]
+    }]
 }, opts);
 
 
