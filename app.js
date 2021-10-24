@@ -7,7 +7,14 @@ const ejsMate = require('ejs-mate');
 
 
 const app=express();
+/*const dbUrl='mongodb://localhost:27017/hackercamp';
+mongoose.connect(dbUrl, { useNewUrlParser: true });
 
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, 'connetion error'));
+db.once('open', () => {
+    console.log('database connected');
+})*/
 app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
@@ -43,6 +50,12 @@ app.put('/posts', (req, res) => { //EDIT
 })
 app.delete('/posts', (req, res) => { //DELETE
     res.send("For Deleting Posts");
+})
+app.get('/register',(req,res)=>{
+    res.render('Users/register.ejs');
+})
+app.post('/register',(req,res)=>{
+    res.send(req.body);
 })
 
 app.listen(3000, () => {

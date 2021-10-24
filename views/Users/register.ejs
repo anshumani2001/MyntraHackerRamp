@@ -1,0 +1,84 @@
+
+<% layout('layouts/boilerplate') %>
+<div class="container d-flex justify-content-center align-items-center  mb-5">
+  <div class="row">
+      <div class="col-md-6 offset-md-5 col-xl-4 offset-xl-4">
+          <div class="card shadow">
+              <img src="https://images.unsplash.com/photo-1571863533956-01c88e79957e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80"
+                  alt="" class="card-img-top" />
+              <div class="card-body">
+                  <h5 class="card-title">Register</h5>
+                  <form action="/register" method="POST" class="needs-validation" novalidate> 
+                    <div class="mb-2">
+                      <label class="form-label"for="firstname"> First Name </label>
+                      <input class="form-control" type="text" id="firstname" name="firstname" required autofocus> 
+                    </div>
+                    <div class="mb-2">
+                      <label class="form-label"for="lastname"> Last Name </label>
+                      <input class="form-control" type="text" id="lastname" name="lastname" required > 
+                    </div>
+                    <div class="mb-2">
+                      <label class="form-label"for="age"> Age </label>
+                      <input class="form-control" type="number" id="age" name="age" required  min="18" max="120"> 
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label"for="gender"> Gender </label>
+                        <select class="form-select" aria-label="Default select example" id="gender" name="gender">
+                           
+                            <option value="M" selected>Male</option>
+                            <option value="F">Female</option>
+                            <option value="O">Other</option>
+                          </select>
+                      </div>
+
+                    <div class="mb-2">
+                      <label class="form-label" for="email">Email</label>
+                      <input class="form-control" type="email" id="email" name="email" required> 
+                    </div>
+                   <div class="mb-2">
+                    <label class="form-label" for="password">Password</label>
+                    <input class="form-control" type="password" id="password" name="password" required>
+                    
+                    <input type="checkbox" onclick="myFunction()">Show Password 
+                   </div>
+                    
+                    <button class="btn btn-success">Create Account</button>
+                </form>
+                  
+              </div>
+          </div>
+      </div>
+  </div>
+
+<script>
+    (function () {
+        'use strict'
+      
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+      
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+          .forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+              if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+              }
+      
+              form.classList.add('was-validated')
+            }, false)
+          })
+      })()
+        </script>
+    
+       <script>
+        function myFunction() {
+          var x = document.getElementById("password");
+          if (x.type === "password") {
+            x.type = "text";
+          } else {
+            x.type = "password";
+          }
+        }
+       </script>
