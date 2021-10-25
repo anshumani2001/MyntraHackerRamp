@@ -23,6 +23,7 @@ const UserSchema = new Schema({
         type: String,
         enum: ['M', 'F', 'O']
     }
+    
 });
 
 UserSchema.plugin(passportLocalMongoose);

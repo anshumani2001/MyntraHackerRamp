@@ -5,6 +5,9 @@
             <img src="https://source.unsplash.com/collection/3356576/1600x900" alt="">
             <div class="card-body">
                 <p class="card-text"><%= post.description  %> </h5>
+                    <form action="/posts/<%=post._id%>/like" method="GET">
+                        <button class="btn btn-primary">Like</button>
+                    </form>
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">Posted by <%= post.author.username%></li>
@@ -39,6 +42,7 @@
         <button class="btn btn-success">Submit</button>
     </form>
     <% } %>
+    <p>likes <%=post.likesCount %> </p>
     <% for(let comment of post.comments) { %>
     <div class="card mb-3 ">
         <div class="card-body">

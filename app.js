@@ -109,6 +109,16 @@ app.put('/posts/:id', async (req, res) => { //EDIT
     res.redirect('/posts/' + post._id);
 
 })
+app.get('/posts/:id/like',isLoggedIn,async (req,res)=>{
+    const user=req.user;
+    const {id}=req.params;
+    const post =await Post.findById(id);
+    post.likesCount+=1;
+    post.save();
+    res.redirect('/posts/'+id);
+   // console.log(post.likesCount);
+})
+//app.post('/posts/:id/like',)
 app.post('/posts/:id/comments', async (req, res) => {
     //res.send('works');
     const post = await Post.findById(req.params.id);
