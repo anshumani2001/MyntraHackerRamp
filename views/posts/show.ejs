@@ -1,0 +1,17 @@
+<% layout('layouts/boilerplate') %>
+
+    <h1>
+        <%= post.author %>
+    </h1>
+    <h2>
+        <%= post.description %>
+    </h2>
+    <img src="https://source.unsplash.com/collection/3356576/1600x900" alt="">
+    <p> <a href="/posts/<%=post._id%>/edit">Edit</a>
+    </p>
+    <p>
+    <form action="/posts/<%=post._id%>?_method=DELETE" method="POST">
+        <button>Delete</button>
+    </form>
+    </p>
+    <a href="/posts">All Posts</a>

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const comment = require('./comment')
+const Comment = require('./comment');
 const Schema = mongoose.Schema;
 
 const ImageSchema = new Schema({
@@ -7,14 +7,14 @@ const ImageSchema = new Schema({
     filename: String
 });
 
-ImageSchema.virtual('thumbnail').get(function () {
-    return this.url.replace('/upload', '/upload/w_200');
-});
+// ImageSchema.virtual('thumbnail').get(function () {
+//     return this.url.replace('/upload', '/upload/w_200');
+// });
 
 const opts = { toJSON: { virtuals: true } };
 
 const PostSchema = new Schema({
-    images: [{ type: String }],
+    image: { type: String },
     description: String,
     author: {
         type: Schema.Types.ObjectId,
@@ -34,22 +34,13 @@ const PostSchema = new Schema({
     }],
     comments: [{
             type: Schema.Types.ObjectId,
-            ref: 'comment'
+            ref: 'Comment'
     }]
 }, opts);
 
-
-PostSchema.virtual('properties.popUpMarkup').get(function () {
-    return `
-    <strong><a href="/campgrounds/${this._id}">${this.title}</a><strong>
-    <p>${this.description.substring(0, 20)}...</p>`
-});
-
-
-
 PostSchema.post('findOneAndDelete', async function (doc) {
     if (doc) {
-        await comment.deleteMany({
+        await Comment.deleteMany({
             _id: {
                 $in: doc.comments
             }
@@ -57,4 +48,4 @@ PostSchema.post('findOneAndDelete', async function (doc) {
     }
 })
 
-module.exports = mongoose.model('Campground', PostSchema);
+module.exports = mongoose.model('Post', PostSchema);
