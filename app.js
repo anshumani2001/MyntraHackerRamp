@@ -16,9 +16,7 @@ const app = express();
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 
-
 const dbUrl = 'mongodb://localhost:27017/hackerramp';
-
 
 mongoose.connect(dbUrl, { useNewUrlParser: true });
 
@@ -50,6 +48,7 @@ app.use(session(sessionConfig))
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
+
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
@@ -66,7 +65,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/posts', async (req, res) => {
-    const posts = await Post.find({});
+    const posts = await Post.find({}).populate('author');
     res.render('posts/index', { posts });
 });
 
@@ -78,7 +77,7 @@ app.post('/posts', async (req, res) => {  //Post Req
     const { description, images } = req.body;
     console.log(description, images)
     const newPost = new Post({ description, images });
-    console.log(newPost);
+    newPost.author = req.user._id;
     await newPost.save();
     req.flash('success', 'Posted the post');
     res.redirect('/posts')
@@ -87,7 +86,12 @@ app.post('/posts', async (req, res) => {  //Post Req
 })
 
 app.get('/posts/:id', async (req, res,) => {
-    const post = await Post.findById(req.params.id).populate('comments');
+    const post = await Post.findById(req.params.id).populate({
+        path: 'comments',
+        populate: {
+            path: 'author'
+        }
+    }).populate('author');    
     res.render('posts/show', { post });
 });
 
@@ -110,6 +114,7 @@ app.post('/posts/:id/comments', async (req, res) => {
     const post = await Post.findById(req.params.id);
     console.log(req.body);
     const comm = new Comment(req.body.comment);
+    comm.author = req.user._id;
     post.comments.push(comm);
     await comm.save()
     await post.save();
