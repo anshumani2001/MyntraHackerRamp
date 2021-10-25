@@ -1,17 +1,24 @@
 <% layout('layouts/boilerplate') %>
+<div class="row">
+    <div class="col-6">
+        <div class="card mb-3">
+            <img src="https://source.unsplash.com/collection/3356576/1600x900" alt="">
+            <div class="card-body">
+                <p class="card-text"><%= post.description  %> </h5>
+            </div>
+            <div class="card-body">
+                <a  class="btn btn-warning" href="/posts/<%=post._id%>/edit">Edit</a>
+                <form action="/posts/<%=post._id%>?_method=DELETE" method="POST" class="d-inline">
+                    <button class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-info" href="/posts">All Posts</a>
+            </div>
+        </div>
 
-    <h1>
-        <%= post.author %>
-    </h1>
-    <h2>
-        <%= post.description %>
-    </h2>
-    <img src="https://source.unsplash.com/collection/3356576/1600x900" alt="">
-    <p> <a href="/posts/<%=post._id%>/edit">Edit</a>
-    </p>
-    <p>
-    <form action="/posts/<%=post._id%>?_method=DELETE" method="POST">
-        <button>Delete</button>
-    </form>
-    </p>
-    <a href="/posts">All Posts</a>
+
+    </div>
+</div>
+    
+   
