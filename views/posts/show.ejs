@@ -19,6 +19,30 @@
 
 
     </div>
+
+<div class="col-6">
+    <%# if(currentUser){ %>
+    <h2>Leave a comment</h2>
+    <form action="/posts/<%=post._id%>/comments" method="POST" class="mb-3 validated-form" novalidate>
+        <div class="mb-3">
+            <label class="form-label" for="body">Comment Text</label>
+            <textarea class="form-control" name="comment" id="body" cols="30" rows="3" required></textarea>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+        <button class="btn btn-success">Submit</button>
+    </form>
+    <%# } %>
+    <% for(let comment of post.comments) { %>
+    <div class="card mb-3 ">
+        <div class="card-body">
+            <h5 class="card-title"> <%= comment.author.username%></h5>
+            <p class="card-text">comment: <%= comment.body %></p>
+        </div>
+    </div>
+    <% } %>
+</div>
 </div>
     
    
