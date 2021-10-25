@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const Post = require('./models/post');
-const comment=require('./models/comment');
+const Comment=require('./models/comment');
 const methodOverride = require('method-override');
 const ExpressError = require('./utils/ExpressError');
 const ejsMate = require('ejs-mate'); 
@@ -73,7 +73,7 @@ app.post('/posts/:id/comments',async (req,res)=>{
     //res.send('works');
     const post =await Post.findById(req.params.id);
     console.log(req.body);
-    const comm=new comment(req.body.comment);
+    const comm=new Comment(req.body.comment);
     post.comments.push(comm);
     await comm.save()
      await post.save();
@@ -82,7 +82,7 @@ res.redirect('/posts/'+post.id);
 app.delete('/posts/:id/comments/:commentid',async (req,res)=>{
     const {id,commentid}=req.params;
    await Post.findByIdAndUpdate(id,{$pull:{comments:commentid}});
-await comment.findByIdAndDelete(req.params.commentid);
+await Comment.findByIdAndDelete(req.params.commentid);
 res.redirect('/posts/'+id);
 
 
