@@ -138,6 +138,17 @@ app.post('/register', async(req, res) => {
     }
     // res.send(req.body);
 })
+app.get('/login', (req, res) => {
+    res.render('Users/login.ejs');
+})
+
+app.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), async (req, res) => {
+    console.log(req.user)
+    // const redirectUrl = req.session.returnTo || '/';
+    // req.flash('success', '####Login Message####');
+    // res.redirect(redirectUrl);
+    res.redirect('/')
+})
 
 app.listen(3000, () => {
     console.log('Serving on port 3000')
