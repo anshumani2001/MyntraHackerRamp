@@ -2,9 +2,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const Post = require('./models/post');
+const comment=require('./models/comment');
 const methodOverride = require('method-override');
 const ExpressError = require('./utils/ExpressError');
 const ejsMate = require('ejs-mate'); 
+const post = require('./models/post');
 
 const app=express();
 const dbUrl='mongodb://localhost:27017/hackerramp';
@@ -50,7 +52,7 @@ app.post('/posts', async(req, res) => {  //Post Req
 })
 
 app.get('/posts/:id', async (req, res,) => {
-    const post = await Post.findById(req.params.id)
+    const post = await Post.findById(req.params.id).populate('comments');
     res.render('posts/show', { post });
 });
 
@@ -67,7 +69,24 @@ app.put('/posts/:id',async (req, res) => { //EDIT
     res.redirect('/posts/'+post._id);
 
 })
+app.post('/posts/:id/comments',async (req,res)=>{
+    //res.send('works');
+    const post =await Post.findById(req.params.id);
+    console.log(req.body);
+    const comm=new comment(req.body.comment);
+    post.comments.push(comm);
+    await comm.save()
+     await post.save();
+res.redirect('/posts/'+post.id);
+})
+app.delete('/posts/:id/comments/:commentid',async (req,res)=>{
+    const {id,commentid}=req.params;
+   await Post.findByIdAndUpdate(id,{$pull:{comments:commentid}});
+await comment.findByIdAndDelete(req.params.commentid);
+res.redirect('/posts/'+id);
 
+
+})
 app.delete('/posts/:id', async (req, res) => { //DELETE
     const { id } = req.params;
     await Post.findByIdAndDelete(id);

@@ -26,7 +26,7 @@
     <form action="/posts/<%=post._id%>/comments" method="POST" class="mb-3 validated-form" novalidate>
         <div class="mb-3">
             <label class="form-label" for="body">Comment Text</label>
-            <textarea class="form-control" name="comment" id="body" cols="30" rows="3" required></textarea>
+            <textarea class="form-control" name="comment[body]" id="body" cols="30" rows="3" required></textarea>
             <div class="valid-feedback">
                 Looks good!
             </div>
@@ -37,8 +37,11 @@
     <% for(let comment of post.comments) { %>
     <div class="card mb-3 ">
         <div class="card-body">
-            <h5 class="card-title"> <%= comment.author.username%></h5>
+            <h5 class="card-title"> </h5>
             <p class="card-text">comment: <%= comment.body %></p>
+            <form action ="/posts/<%=post._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST">
+                <button class="btn btn-danger">Delete</button>
+            </form> 
         </div>
     </div>
     <% } %>
