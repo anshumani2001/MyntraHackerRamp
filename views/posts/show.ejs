@@ -18,8 +18,12 @@
                     <form class="d-inline" action="/posts/<%=post._id%>?_method=DELETE" method="POST">
                         <button class="btn btn-danger">Delete</button>
                     </form>
+                    <a href="whatsapp://send?text=The text to share!" data-action="share/whatsapp/share">
+                        <button class="btn btn-success d-inline">Share via Whatsapp</button>  
+                     </a>
                 </div>
                 <% } %>
+                    
             <div class="card-footer">
                 <a class="btn btn-info" href="/posts">All Posts</a>
             </div>
