@@ -40,7 +40,7 @@ const sessionConfig = {
 app.use(session(sessionConfig))
 
 app.get('/', (req, res) => {
-    res.send('home')
+    res.render('home')
 });
 
 app.get('/posts', async (req, res) => {
