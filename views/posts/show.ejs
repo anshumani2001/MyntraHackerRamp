@@ -10,7 +10,7 @@
                     </form>
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item">Posted by <%= post.author.username%></li>
+                <li class="list-group-item">Posted by <a href="/users/<%= post.author.username %>"><%= post.author.firstname + " " + post.author.secondname %></a></li>
             </ul>
             <%  if( currentUser && post.author.equals(currentUser._id))  {%>
                 <div class="card-body">

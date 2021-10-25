@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate') %>
-
-    <% for( let post of posts ) { %>
+<h1><a href="/users/<%= userF.username %>"><%= userF.firstname + " " + userF.secondname %></a></h1>
+    <% for( let post of userPosts ) { %>
         <div class="card mb-3">
             <div class="row">
                 <div class="col-md-4">
@@ -14,7 +14,7 @@
                 <div class="col-md-8">
                     <div class="card-body">
                         <h5 class="card-title">
-                            <a href="/users/<%= post.author.username %>"><%= post.author.firstname + " " + post.author.secondname %></a>
+                            <%= post.author.username %>
                         </h5>
                         <p class="card-text">
                             <%= post.description %>
@@ -24,7 +24,7 @@
                                 <%= post.likes %>
                             </small>
                         </p>
-                        <a href="/posts/<%= post.id %> " class="btn btn-primary">View%> </a>
+                        <a href="/posts/<%= post.id %> " class="btn btn-primary">View <%= post.PGname %> </a>
                     </div>
                 </div>
             </div>

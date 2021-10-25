@@ -138,8 +138,6 @@ app.delete('/posts/:id/comments/:commentid', async (req, res) => {
     await Comment.findByIdAndDelete(req.params.commentid);
     req.flash('success', "Comment Deleted");
     res.redirect('/posts/' + id);
-
-
 })
 
 app.delete('/posts/:id', async (req, res) => { //DELETE
@@ -181,6 +179,25 @@ app.post('/login', passport.authenticate('local', { failureFlash: true, failureR
     req.flash('success', 'Welcome Back');
     res.redirect(redirectUrl);
     
+})
+
+app.get('/users/:userName', async(req, res) => {
+    var userF = await User.findOne({ username: req.params.userName}).exec();
+    if (userF) {
+        // console.log(userF)
+        var userPosts = []
+        const posts = await Post.find({}).populate('author');
+        for (let post of posts) {
+            // console.log(post.author)
+            if (post.author && post.author.username == req.params.userName) {
+                userPosts.push(post);
+            }
+        }
+        console.log(userPosts)
+        res.render('Users/profile', {userF, userPosts})
+    } else {
+        res.send("No such User Exists");
+    }
 })
 
 app.get('/logout', (req, res) => {
