@@ -7,9 +7,16 @@ const methodOverride = require('method-override');
 const session = require('express-session');
 const ExpressError = require('./utils/ExpressError');
 const ejsMate = require('ejs-mate');
+const User = require('./models/user');
 
 const app = express();
+
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+
+
 const dbUrl = 'mongodb://localhost:27017/hackerramp';
+
 
 mongoose.connect(dbUrl, { useNewUrlParser: true });
 
@@ -38,6 +45,12 @@ const sessionConfig = {
     }
 }
 app.use(session(sessionConfig))
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.get('/', (req, res) => {
     res.render('home')
@@ -109,8 +122,21 @@ app.get('/register', (req, res) => {
     res.render('Users/register.ejs');
 })
 
-app.post('/register', (req, res) => {
-    res.send(req.body);
+app.post('/register', async(req, res) => {
+    try {
+        const { firstname, lastname, email, username, password, age, gender } = req.body;
+        const user = new User({firstname, secondname: lastname, email, username, age, gender});
+        const registeredUser = await User.register(user, password);
+        req.login(registeredUser, err => {
+            if (err) return next(err);
+            // req.flash('success', 'Successfully registered!');
+            return res.redirect('/');
+        })
+    } catch (e) {
+        // req.flash('error', e.message);
+        res.redirect('/register');
+    }
+    // res.send(req.body);
 })
 
 app.listen(3000, () => {
