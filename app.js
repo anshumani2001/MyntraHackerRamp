@@ -5,6 +5,7 @@ const Post = require('./models/post');
 const Comment = require('./models/comment');
 const methodOverride = require('method-override');
 const session = require('express-session');
+const flash=require('connect-flash');
 const ExpressError = require('./utils/ExpressError');
 const ejsMate = require('ejs-mate');
 const User = require('./models/user');
@@ -45,13 +46,18 @@ const sessionConfig = {
     }
 }
 app.use(session(sessionConfig))
-
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+app.use((req,res,next)=>{
+    res.locals.success=req.flash('success');
+    res.locals.error=req.flash('error');
+    next();
+})
 app.get('/', (req, res) => {
     res.render('home')
 });
@@ -71,6 +77,7 @@ app.post('/posts', async (req, res) => {  //Post Req
     const newPost = new Post({ description, images });
     console.log(newPost);
     await newPost.save();
+    req.flash('success','Posted the post');
     res.redirect('/posts')
     // res.send(req.body);
     // res.send('Post request after creating a <post>');
@@ -91,6 +98,7 @@ app.put('/posts/:id', async (req, res) => { //EDIT
     console.log(req.body);
     const post = await Post.findByIdAndUpdate(id, { description: req.body.description });
     await post.save();
+    req.flash('success',"Post Edited")
     res.redirect('/posts/' + post._id);
 
 })
@@ -102,12 +110,14 @@ app.post('/posts/:id/comments', async (req, res) => {
     post.comments.push(comm);
     await comm.save()
     await post.save();
+    req.flash('success','Comment Added')
     res.redirect('/posts/' + post.id);
 })
 app.delete('/posts/:id/comments/:commentid', async (req, res) => {
     const { id, commentid } = req.params;
     await Post.findByIdAndUpdate(id, { $pull: { comments: commentid } });
     await Comment.findByIdAndDelete(req.params.commentid);
+    req.flash('success',"Comment Deleted");
     res.redirect('/posts/' + id);
 
 
@@ -115,6 +125,7 @@ app.delete('/posts/:id/comments/:commentid', async (req, res) => {
 app.delete('/posts/:id', async (req, res) => { //DELETE
     const { id } = req.params;
     await Post.findByIdAndDelete(id);
+    req.flash('success','Post was deleted');
     res.redirect('/posts');
 })
 
@@ -129,11 +140,11 @@ app.post('/register', async(req, res) => {
         const registeredUser = await User.register(user, password);
         req.login(registeredUser, err => {
             if (err) return next(err);
-            // req.flash('success', 'Successfully registered!');
+         req.flash('success', 'Successfully registered!');
             return res.redirect('/');
         })
     } catch (e) {
-        // req.flash('error', e.message);
+        req.flash('error', e.message);
         res.redirect('/register');
     }
     // res.send(req.body);
@@ -147,6 +158,7 @@ app.post('/login', passport.authenticate('local', { failureFlash: true, failureR
     // const redirectUrl = req.session.returnTo || '/';
     // req.flash('success', '####Login Message####');
     // res.redirect(redirectUrl);
+    req.flash('success','Welcome Back');
     res.redirect('/')
 })
 
