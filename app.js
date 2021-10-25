@@ -55,11 +55,17 @@ app.get('/posts/:id', async (req, res,) => {
 });
 
 app.get('/posts/:id/edit', async (req, res) => {
-    res.send('edit form');
+    const post=await Post.findById(req.params.id);
+    res.render('posts/edit',{post});
 })
 
-app.put('/posts', (req, res) => { //EDIT
-    res.send("For Making Edit Post  Request");
+app.put('/posts/:id',async (req, res) => { //EDIT
+    const {id}=req.params;
+    console.log(req.body);
+    const post=await Post.findByIdAndUpdate(id,{description:req.body.description});
+    await post.save();
+    res.redirect('/posts/'+post._id);
+
 })
 
 app.delete('/posts/:id', async (req, res) => { //DELETE
