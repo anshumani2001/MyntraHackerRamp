@@ -1,0 +1,6 @@
+<% layout('layouts/boilerplate') %>
+<h1>Following</h1>
+<% for(let user of following){ %> 
+    <div><a href="/users/<%=user.username%> "><%=user.firstname + " " + user.secondname%> </a>
+    </div>
+<% } %> 
