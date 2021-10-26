@@ -247,6 +247,19 @@ app.get('/users/:userName', async(req, res) => {
 app.get('/users/:userName/followers', isLoggedIn, async (req, res) => {
     var userF = await User.findOne({ username: req.params.userName}).populate('followers').exec();
     if (userF) {
+<<<<<<< HEAD
+=======
+        // console.log(userF)
+        // var userPosts = []
+        // const posts = await Post.find({}).populate('author');
+        // for (let post of posts) {
+        //     // console.log(post.author)
+        //     if (post.author && post.author.username == req.params.userName) {
+        //         userPosts.push(post);
+        //     }
+        // }
+        // console.log(userF);
+>>>>>>> 0e2bc36dde55bd47f89f26c514d43422383fa582
         res.render('Users/followers', {followers : userF.followers});
     } else {
         res.send("No such User Exists");
@@ -255,6 +268,19 @@ app.get('/users/:userName/followers', isLoggedIn, async (req, res) => {
 app.get('/users/:userName/following', isLoggedIn, async (req, res) => {
     var userF = await User.findOne({ username: req.params.userName}).populate('following').exec();
     if (userF) {
+<<<<<<< HEAD
+=======
+        // console.log(userF)
+        // var userPosts = []
+        // const posts = await Post.find({}).populate('author');
+        // for (let post of posts) {
+        //     // console.log(post.author)
+        //     if (post.author && post.author.username == req.params.userName) {
+        //         userPosts.push(post);
+        //     }
+        // }
+        // console.log(userF);
+>>>>>>> 0e2bc36dde55bd47f89f26c514d43422383fa582
         res.render('Users/following', {following : userF.following});
     } else {
         res.send("No such User Exists");
@@ -272,6 +298,13 @@ app.post('/users/:userName/follow', isLoggedIn, async (req, res) => {
             res.redirect('/')
         }
     }
+<<<<<<< HEAD
+=======
+    // console.log(toFollow.followers.includes(currUser), toFollow.followers)
+    // if (toFollow.followers.includes(currUser)) {
+        
+    // }
+>>>>>>> 0e2bc36dde55bd47f89f26c514d43422383fa582
     toFollow.followers.push(currUser);
     toFollow.save();
     currUser.following.push(toFollow);
