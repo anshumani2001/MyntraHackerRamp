@@ -1,10 +1,12 @@
 <% layout('layouts/boilerplate') %>
 <h1>Follow</h1>
 <% for(let user of users){ %> 
-    <% if(user._id!==currentUser._id){ %> 
-    <a href="/users/<%=user.username%> "><%=user.firstname%> </a>
-    <form action="/users/<%=user.username%>/follow" method="POST">
-        <button class="btn btn-primary">Follow </button>
-    </form>
+    <% if (user._id!==currentUser._id) { %>     
+    <div class="mb-3">
+        <a href="/users/<%=user.username%> "><%=user.firstname%> </a>
+        <form class="d-inline" action="/users/<%=user.username%>/follow" method="POST">
+            <button class="btn btn-primary">Follow </button>
+        </form>
+    </div>
     <% } %> 
-    <% } %> 
+<% } %> 

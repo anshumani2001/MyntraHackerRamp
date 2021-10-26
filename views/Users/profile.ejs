@@ -1,12 +1,12 @@
 <% layout('layouts/boilerplate') %>
-<form action="/users/<%=userF.username%>/followers" method="GET">
-    <button>Followers</button> 
+<form class="mb-3 d-inline" action="/users/<%=userF.username%>/followers" method="GET">
+    <button class="btn btn-primary">Followers</button> 
 </form>
-<form action="/users/<%=userF.username%>/following" method="GET">
-    <button>Following</button> 
+<form class="mb-3 d-inline" action="/users/<%=userF.username%>/following" method="GET">
+    <button class="btn btn-secondary">Following</button> 
 </form>
-<form action="/users/<%=userF.username%>/follow" method="POST">
-    <button class="btn btn-primary">Follow </button>
+<form class="mb-3 d-inline" action="/users/<%=userF.username%>/follow" method="POST">
+    <button class="btn btn-success">Follow </button>
 </form>
 <h1><a href="/users/<%= userF.username %>"><%= userF.firstname + " " + userF.secondname %></a></h1>
     <% for( let post of userPosts ) { %>
