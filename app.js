@@ -16,7 +16,7 @@ const app = express();
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 
-const dbUrl = 'mongodb://localhost:27017/hackerramp';
+const dbUrl = 'mongodb://localhost:27017/hackerramp1';
 
 mongoose.connect(dbUrl, { useNewUrlParser: true });
 
@@ -109,16 +109,21 @@ app.put('/posts/:id', async (req, res) => { //EDIT
     res.redirect('/posts/' + post._id);
 
 })
+//let counter=1;
 app.get('/posts/:id/like',isLoggedIn,async (req,res)=>{
     const user=req.user;
+    
     const {id}=req.params;
     const post =await Post.findById(id);
     post.likesCount+=1;
+    //counter*=-1;
+
     post.save();
     res.redirect('/posts/'+id);
    // console.log(post.likesCount);
 })
 //app.post('/posts/:id/like',)
+
 app.post('/posts/:id/comments', async (req, res) => {
     //res.send('works');
     const post = await Post.findById(req.params.id);
@@ -200,6 +205,75 @@ app.get('/users/:userName', async(req, res) => {
     }
 })
 
+app.get("/users/:id/add", isLoggedIn, (req, res) => {
+    // First finding the logged in user
+    User.findById(req.user._id, (err, user) => {
+        if (err) {
+            console.log(err);
+            req.flash(
+                "error",
+                "There has been an error adding this person to your friends list"
+            );
+            res.redirect("back");
+        } else {
+            // finding the user that needs to be added
+            User.findById(req.params.id, (err, foundUser) => {
+                if (err) {
+                    console.log(err);
+                    req.flash("error", "Person not found");
+                    res.redirect("back");
+                } else {
+                    // FOUNDUSER IS THE USER THAT THE LOGGED IN USER WANTS TO ADD
+                    // USER IS THE CURRENT LOGGED IN USER
+
+                    // checking if the user is already in foundUsers friend requests or friends list
+                    if (
+                        foundUser.friendRequests.find(o =>
+                            o._id.equals(user._id)
+                        )
+                    ) {
+                        req.flash(
+                            "error",
+                            `You have already follow ${
+                                user.firstName
+                            }`
+                        );
+                        return res.redirect("back");
+                    } else if (
+                        foundUser.friends.find(o => o._id.equals(user._id))
+                    ) {
+                        req.flash(
+                            "error",
+                            `The user ${
+                                foundUser.firstname
+                            } is already in your friends list`
+                        );
+                        return res.redirect("back");
+                    }
+                    let currUser = {
+                        _id: req.user._id,
+                        firstname: req.user.firstname,
+                        lastname: req.user.lastname
+                    };
+                    foundUser.friendRequests.push(currUser);
+                    foundUser.save();
+                    req.flash(
+                        "success",
+                        `Success! You started folowing ${
+                            foundUser.firstname
+                        } `
+                    );
+                    res.redirect("back");
+                }
+            });
+        }
+    });
+});
+
+app.get('/users',isLoggedIn,async (req,res)=>{
+    const users=await User.find({});
+    res.render('Users/meet',{users});
+})
 app.get('/logout', (req, res) => {
     req.logout();
     req.flash('success', "Goodbye!");

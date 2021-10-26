@@ -22,7 +22,19 @@ const UserSchema = new Schema({
     gender: {
         type: String,
         enum: ['M', 'F', 'O']
-    }
+    },
+    friends: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+        }
+    ],
+    friendRequests: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+        }
+    ]
     
 });
 

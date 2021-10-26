@@ -1,4 +1,7 @@
 <% layout('layouts/boilerplate') %>
+<form action="/users/<%=userF._id%>/requests" method="GET">
+    <button>Show Followers</button> 
+</form>
 <h1><a href="/users/<%= userF.username %>"><%= userF.firstname + " " + userF.secondname %></a></h1>
     <% for( let post of userPosts ) { %>
         <div class="card mb-3">
