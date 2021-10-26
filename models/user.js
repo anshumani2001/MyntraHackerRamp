@@ -23,13 +23,13 @@ const UserSchema = new Schema({
         type: String,
         enum: ['M', 'F', 'O']
     },
-    friends: [
+    followers: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
         }
     ],
-    friendRequests: [
+    following: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
