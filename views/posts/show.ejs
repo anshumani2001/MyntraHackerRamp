@@ -10,7 +10,9 @@
                     </form>
             </div>
             <ul class="list-group list-group-flush">
+                <li class="list-group-item text-muted">Likes: <%=post.likesCount %> </li>
                 <li class="list-group-item">Posted by <a href="/users/<%= post.author.username %>"><%= post.author.firstname + " " + post.author.secondname %></a></li>
+                
             </ul>
             <%  if( currentUser && post.author.equals(currentUser._id))  {%>
                 <div class="card-body">
@@ -18,11 +20,18 @@
                     <form class="d-inline" action="/posts/<%=post._id%>?_method=DELETE" method="POST">
                         <button class="btn btn-danger">Delete</button>
                     </form>
-                    <a href="whatsapp://send?text=The text to share!" data-action="share/whatsapp/share">
-                        <button class="btn btn-success d-inline">Share via Whatsapp</button>  
-                     </a>
+                    
                 </div>
                 <% } %>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"> <a href="https://wa.me/?text=/posts/<%=post._id%>" data-action="share/whatsapp/share" class="text-decoration-none">
+                        <button class="btn btn-success d-inline">Share via Whatsapp</button>  
+                    </a> 
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.google.co.in/" target="_blank" class="text-decoration-none">
+                        <button class="btn btn-primary d-inline">Share via Facebook</button>
+                    </a>
+                </li>
+                </ul>    
                     
             <div class="card-footer">
                 <a class="btn btn-info" href="/posts">All Posts</a>
@@ -46,7 +55,7 @@
         <button class="btn btn-success">Submit</button>
     </form>
     <% } %>
-    <p>likes <%=post.likesCount %> </p>
+
     <% for(let comment of post.comments) { %>
     <div class="card mb-3 ">
         <div class="card-body">
