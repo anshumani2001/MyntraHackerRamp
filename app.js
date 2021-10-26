@@ -10,7 +10,7 @@ const ExpressError = require('./utils/ExpressError');
 const ejsMate = require('ejs-mate');
 const User = require('./models/user');
 const { isLoggedIn } = require('./middleware');
-
+const Product=require('./models/product');
 const app = express();
 
 const passport = require('passport');
@@ -172,7 +172,35 @@ app.post('/register', async (req, res, next) => {
     }
     // res.send(req.body);
 })
+///Product Routes 
+app.get('/products',async (req,res)=>{
+    const products=await Product.find({});
+    res.render('products/index',{products});
+})
+app.get('/products/new',(req,res)=>{
+    res.render('products/new');
+})
+app.post('/products',async (req,res)=>{
+   // res.send(req.body);
+   const {name,price,image}=req.body;
+  // console.log(name,price,image);
+  const product=new Product({name,price,image});
+    await product.save();
+    req.flash('success','Product Created');
+    res.redirect('/products');
 
+})
+app.get('/products/:id',async(req,res)=>{
+    const{id}=req.params;
+    const product=await Product.findById(id);
+    res.render('products/show',{product});
+})
+app.delete('/products/:id',async(req,res)=>{
+    const {id}=req.params;
+    const product=await Product.findByIdAndDelete(id);
+    req.flash('success','Product Deleted');
+    res.redirect('/products');
+})
 app.get('/login', (req, res) => {
     res.render('Users/login.ejs');
 })
