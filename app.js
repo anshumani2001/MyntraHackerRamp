@@ -69,7 +69,18 @@ app.get('/', (req, res) => {
 
 app.get('/posts', async (req, res) => {
     const posts = await Post.find({}).populate('author');
-    res.render('posts/index', { posts });
+    let visiblePosts = [];
+    for (let post of posts) {
+        if (post.isPrivate && post.isPrivate == 'Private') {
+            // console.log(post.isPrivate, req.user)
+            if (req.user && post.author.followers.includes(req.user._id)) {
+                visiblePosts.push(post);
+            }
+        } else {
+            visiblePosts.push(post);
+        }
+    }
+    res.render('posts/index', { posts : visiblePosts });
 });
 
 app.get('/posts/new', isLoggedIn, (req, res) => {
@@ -82,7 +93,7 @@ app.post('/posts', async (req, res) => {  //Post Req
     const newPost = new Post({ description, images, isPrivate });
     newPost.author = req.user._id;
     await newPost.save();
-    console.log(newPost)
+    // console.log(newPost)
     req.flash('success', 'Posted the post');
     res.redirect('/posts')
     // res.send(req.body);
@@ -202,6 +213,19 @@ app.get('/products/:id',async(req,res)=>{
             path: 'author'
         }
     });
+    let posts = product.posts;
+    let visiblePosts = []
+    for (let post of posts) {
+        if (post.isPrivate && post.isPrivate == 'Private') {
+            // console.log(post.isPrivate, req.user)
+            if (req.user && post.author.followers.includes(req.user._id)) {
+                visiblePosts.push(post);
+            }
+        } else {
+            visiblePosts.push(post);
+        }
+    }
+    product.posts = visiblePosts
     res.render('products/show',{product});
 })
 
@@ -274,16 +298,24 @@ app.get('/users/:userName', async(req, res) => {
     var userF = await User.findOne({ username: req.params.userName}).exec();
     if (userF) {
         // console.log(userF)
-        var userPosts = []
+        let visiblePosts = [];
         const posts = await Post.find({}).populate('author');
         for (let post of posts) {
             // console.log(post.author)
             if (post.author && post.author.username == req.params.userName) {
-                userPosts.push(post);
+                if (post.isPrivate && post.isPrivate == 'Private') {
+                    // console.log(post.isPrivate, req.user)
+                    if (req.user && post.author.followers.includes(req.user._id)) {
+                        visiblePosts.push(post);
+                    }
+                } else {
+                    visiblePosts.push(post);
+                }
             }
         }
         // console.log(userPosts)
-        res.render('Users/profile', {userF, userPosts})
+        
+        res.render('Users/profile', {userF, userPosts: visiblePosts})
     } else {
         res.send("No such User Exists");
     }
@@ -310,7 +342,7 @@ app.post('/users/:userName/follow', isLoggedIn, async (req, res) => {
     const toFollowUsername = req.params.userName;
     const toFollow = await User.findOne({ username: toFollowUsername }).exec();
     const currUser = await User.findOne({ username: req.user.username }).populate('following').exec();
-    console.log(currUser.following)
+    // console.log(currUser.following)
     for (let iam of currUser.following) {
         if (iam.username == toFollowUsername) {
             req.flash('error', 'Already following')
