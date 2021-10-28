@@ -1,12 +1,14 @@
 <% layout('layouts/boilerplate') %>
 <h1>Products</h1>
 <div class="mb-3">
-    <form action="/products/pricesort1" method="GET">
+    <form action="/products" method="GET">
+        <input type="hidden" name="prsearch" value="1" /> 
         <button class="btn btn-info">Sort by Price(Low to High) </button>
     </form>
 </div>
 <div class="mb-3">
-    <form action="/products/pricesort2" method="GET">
+    <form action="/products" method="GET">
+        <input type="hidden" name="prsearch" value="2" /> 
         <button class="btn btn-info">Sort by Price(High to Low) </button>
     </form>
 </div>

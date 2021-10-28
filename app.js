@@ -160,24 +160,23 @@ app.delete('/posts/:id', async (req, res) => { //DELETE
 ///Product Routes 
 app.get('/products',async (req,res)=>{
     const products=await Product.find({});
-  
-    res.render('products/index',{products});
-})
-
-app.get('/products/pricesort1',async (req,res)=>{
-    const products=await Product.find({});
-    products.sort((a,b)=>
+    const {prsearch}=req.query;
+    if(prsearch==1)
+    {
+        products.sort((a,b)=>
     { return a.price-b.price;});
-    res.render('products/index',{products});
-})
-
-app.get('/products/pricesort2',async(req,res)=>{
-    const products=await Product.find({});
-    products.sort((a,b)=>
+    }
+    if(prsearch==2)
+    {
+        products.sort((a,b)=>
     { return a.price-b.price;});
     products.reverse();
-    res.render('products/index',{products});
+    }
+        
+    
+    res.render('products/index',{products,prsearch});
 })
+
 
 app.get('/products/new',isLoggedIn, (req,res)=>{
     res.render('products/new');
