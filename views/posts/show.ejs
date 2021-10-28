@@ -8,6 +8,11 @@
                     <form action="/posts/<%=post._id%>/like" method="GET">
                         <button class="btn btn-primary">Like</button>
                     </form>
+                    <% if(post.product) {%>
+                                <form action="/products/<%=post.product._id%>" method="GET">
+                                    <button class="btn btn-dark">See Product</button>
+                                </form>
+                    <%}%>
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item text-muted">Likes: <%=post.likesCount %> </li>
