@@ -71,7 +71,10 @@ app.get('/posts', async (req, res) => {
     const posts = await Post.find({}).populate('author');
     let visiblePosts = [];
     for (let post of posts) {
-        if (post.isPrivate && post.isPrivate == 'Private') {
+        if ( req.user && post.author.username == req.user.username && post.author) {
+            visiblePosts.push(post);
+        }
+        else if (post.isPrivate && post.isPrivate == 'Private') {
             // console.log(post.isPrivate, req.user)
             if (req.user && post.author.followers.includes(req.user._id)) {
                 visiblePosts.push(post);
@@ -216,7 +219,10 @@ app.get('/products/:id',async(req,res)=>{
     let posts = product.posts;
     let visiblePosts = []
     for (let post of posts) {
-        if (post.isPrivate && post.isPrivate == 'Private') {
+        if (req.user && post.author.username == req.user.username && post.author && req.user) {
+            visiblePosts.push(post);
+        }
+        else if (post.isPrivate && post.isPrivate == 'Private') {
             // console.log(post.isPrivate, req.user)
             if (req.user && post.author.followers.includes(req.user._id)) {
                 visiblePosts.push(post);
@@ -303,7 +309,10 @@ app.get('/users/:userName', async(req, res) => {
         for (let post of posts) {
             // console.log(post.author)
             if (post.author && post.author.username == req.params.userName) {
-                if (post.isPrivate && post.isPrivate == 'Private') {
+                if (req.user && post.author.username == req.user.username && post.author&& req.user) {
+                    visiblePosts.push(post);
+                }
+                else if (post.isPrivate && post.isPrivate == 'Private') {
                     // console.log(post.isPrivate, req.user)
                     if (req.user && post.author.followers.includes(req.user._id)) {
                         visiblePosts.push(post);
