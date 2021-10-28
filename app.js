@@ -188,6 +188,11 @@ app.get('/products',async (req,res)=>{
     products.reverse();
     }
         
+    if(prsearch==3)
+    {
+        products.sort((a,b)=>
+    { return a.deliverytime-b.deliverytime;});
+    }
     
     res.render('products/index',{products,prsearch});
 })

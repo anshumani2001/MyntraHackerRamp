@@ -22,7 +22,13 @@ let productSchema=new Schema({
     posts:[{
         type:Schema.Types.ObjectId,
         ref:'Post'
-    }]
+    }],
+
+    deliverytime:{
+        type:Number,
+        default:1+Math.floor(Math.random()*10),
+
+    }
 
 });
 module.exports=mongoose.model("Product",productSchema);

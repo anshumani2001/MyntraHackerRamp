@@ -12,7 +12,12 @@
         <button class="btn btn-info">Sort by Price(High to Low) </button>
     </form>
 </div>
-
+<div class="mb-3">
+    <form action="/products" method="GET">
+        <input type="hidden" name="prsearch" value="3" /> 
+        <button class="btn btn-info">Sort by Delivery Time </button>
+    </form>
+</div>
 <% for (let product of products){%>
 <div class="card mb-3">
     <div class="row">

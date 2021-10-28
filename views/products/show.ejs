@@ -11,6 +11,9 @@
             <ul class="list-group list-group-flush">
                 
                 <li class="list-group-item">₹ <%= product.price%></li>
+                <% product.deliverytime+=Math.floor(Math.random()*5) %> 
+                <li class="list-group-item">Delivered in <%= product.deliverytime%> days</li>
+
             </ul>
             
                 <% if (currentUser) { %>
