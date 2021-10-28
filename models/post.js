@@ -39,6 +39,11 @@ const PostSchema = new Schema({
     product:{
         type:Schema.Types.ObjectId,
         ref:'product'
+    },
+    isPrivate: {
+        type: String,
+        default: 'Public',
+        enum: ['Public', 'Private']
     }
 }, opts);
 

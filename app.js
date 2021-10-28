@@ -77,11 +77,12 @@ app.get('/posts/new', isLoggedIn, (req, res) => {
 })
 
 app.post('/posts', async (req, res) => {  //Post Req
-    const { description, images } = req.body;
+    const { description, images, isPrivate } = req.body;
     // console.log(description, images)
-    const newPost = new Post({ description, images });
+    const newPost = new Post({ description, images, isPrivate });
     newPost.author = req.user._id;
     await newPost.save();
+    console.log(newPost)
     req.flash('success', 'Posted the post');
     res.redirect('/posts')
     // res.send(req.body);
@@ -215,9 +216,9 @@ app.get('/products/:id/newpost',isLoggedIn,(req,res)=>{
     res.render('products/newpost',{productid:req.params.id});
 })
 
-app.post('/products/:id/',async(req,res)=>{
-    const { description, images } = req.body;
-    const newPost = new Post({ description, images });
+app.post('/products/:id/',isLoggedIn,async(req,res)=>{
+    const { description, images, isPrivate } = req.body;
+    const newPost = new Post({ description, images, isPrivate });
     const currProduct = await Product.findById(req.params.id);
     newPost.author = req.user._id;
     newPost.product = req.params.id;
@@ -226,7 +227,7 @@ app.post('/products/:id/',async(req,res)=>{
     await newPost.save();
     await currProduct.save();
     req.flash('success', 'Posted the post');
-    res.redirect('/posts')
+    res.redirect(`/products/${req.params.id}`)
     // res.send(req.body);
     // res.send('Post request after creating a <post>');
 })

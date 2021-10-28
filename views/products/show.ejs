@@ -29,8 +29,35 @@
         </div>
     </div>
     <div class="col-6">
-        <a class='btn btn-primary mb-3' href="/products/<%=product._id%>/newPost">Add Post</a>
+        
         <% let posts = product.posts %> 
+        <!-- <div class="card mb-3"> -->
+            <div class="row">
+                <form action="/products/<%= product.id %> " method="POST" >
+                    <div class="mb-3">
+                        <label class="form-label" for="description">Description</label>
+                        <textarea class="form-control" type="text" id="description" name="description"
+                            required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-file custom-file">
+                            <input type="file" class="form-file-input" id="images" name="images" multiple>
+                            <label class="form-file-label" for="image">
+                                <span class="form-file-text custom-file-label">Choose image(s)...</span>
+                                <span class="form-file-button">Browse</span>
+                            </label>
+                        </div>
+                    </div>
+                    <input type="checkbox" id="isPrivate" name="isPrivate" value="Private">
+                    <label for="isPrivate"> Allow only followers </label><br>
+                    <div class="mb-3">
+                        <button class="btn btn-success">Add post</button>
+                    </div>
+                   
+                </form>  
+            </div>
+            <br>
+        <!-- </div> -->
         <% for( let post of posts ) { %>
             <div class="card mb-3">
                 <div class="row">
