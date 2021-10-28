@@ -1,7 +1,7 @@
 <% layout('layouts/boilerplate')%>
 
 <div class="row">
-    <div class="col-6 offset-3">
+    <div class="col-6">
         <div class="card mb-3">
             <img src="<%=product.image%>" class="card-img-top" alt="...">
             <div class="card-body">
@@ -20,11 +20,46 @@
                     </div>
                     </form>
                 <% } %>
+
                 
             
             <div class="card-footer text-muted">
                 <a class="btn btn-info" href="/products">All Products</a>
             </div>
         </div>
+    </div>
+    <div class="col-6">
+        <a class='btn btn-primary mb-3' href="/products/<%=product._id%>/newPost">Add Post</a>
+        <% let posts = product.posts %> 
+        <% for( let post of posts ) { %>
+            <div class="card mb-3">
+                <div class="row">
+                    <div class="col-md-4">
+                        <% if(post.image){ %>
+                            <img src="<%=post.image%>" alt="" class="img-fluid">
+                        <% }else{ %>
+                            <img src="https://source.unsplash.com/collection/3356576/1600x900"
+                                alt="" class="img-fluid">
+                        <% } %>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="/users/<%= post.author.username %>"><%= post.author.firstname + " " + post.author.secondname %></a>
+                            </h5>
+                            <p class="card-text">
+                                <%= post.description %>
+                            </p>
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    <%= post.likes %>
+                                </small>
+                            </p>
+                            <a href="/posts/<%= post.id %> " class="btn btn-primary">View%> </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } %>
     </div>
 </div>

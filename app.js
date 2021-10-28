@@ -15,6 +15,7 @@ const app = express();
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
+const { findById } = require('./models/comment');
 
 const dbUrl = 'mongodb://localhost:27017/hackerramp2';
 
@@ -63,6 +64,8 @@ app.use((req, res, next) => {
 app.get('/', (req, res) => {
     res.render('home')
 });
+
+//Social Media Routes
 
 app.get('/posts', async (req, res) => {
     const posts = await Post.find({}).populate('author');
@@ -118,7 +121,7 @@ app.get('/posts/:id/like',isLoggedIn,async (req,res)=>{
     post.likesCount+=1;
     //counter*=-1;
 
-    post.save();
+    await post.save();
     res.redirect('/posts/'+id);
    // console.log(post.likesCount);
 })
@@ -152,6 +155,86 @@ app.delete('/posts/:id', async (req, res) => { //DELETE
     res.redirect('/posts');
 })
 
+
+
+///Product Routes 
+app.get('/products',async (req,res)=>{
+    const products=await Product.find({});
+  
+    res.render('products/index',{products});
+})
+
+app.get('/products/pricesort1',async (req,res)=>{
+    const products=await Product.find({});
+    products.sort((a,b)=>
+    { return a.price-b.price;});
+    res.render('products/index',{products});
+})
+
+app.get('/products/pricesort2',async(req,res)=>{
+    const products=await Product.find({});
+    products.sort((a,b)=>
+    { return a.price-b.price;});
+    products.reverse();
+    res.render('products/index',{products});
+})
+
+app.get('/products/new',isLoggedIn, (req,res)=>{
+    res.render('products/new');
+})
+
+app.post('/products',async (req,res)=>{
+   // res.send(req.body);
+   const {name,price,image}=req.body;
+  // console.log(name,price,image);
+  const product=new Product({name,price,image});
+    await product.save();
+    req.flash('success','Product Created');
+    res.redirect('/products');
+
+})
+
+app.get('/products/:id',async(req,res)=>{
+    const{id}=req.params;
+    const product=await Product.findById(id).populate({
+        path: 'posts',
+        populate: {
+            path: 'author'
+        }
+    });
+    res.render('products/show',{product});
+})
+
+app.delete('/products/:id', async(req,res)=>{
+    const {id}=req.params;
+    const product=await Product.findByIdAndDelete(id);
+    req.flash('success','Product Deleted');
+    res.redirect('/products');
+})
+
+app.get('/products/:id/newpost',isLoggedIn,(req,res)=>{
+    res.render('products/newpost',{productid:req.params.id});
+})
+
+app.post('/products/:id/',async(req,res)=>{
+    const { description, images } = req.body;
+    const newPost = new Post({ description, images });
+    const currProduct = await Product.findById(req.params.id);
+    newPost.author = req.user._id;
+    newPost.product = req.params.id;
+    
+    currProduct.posts.push(newPost);
+    await newPost.save();
+    await currProduct.save();
+    req.flash('success', 'Posted the post');
+    res.redirect('/posts')
+    // res.send(req.body);
+    // res.send('Post request after creating a <post>');
+})
+
+
+//USER ROUTES
+
 app.get('/register', (req, res) => {
     res.render('Users/register.ejs');
 })
@@ -173,53 +256,6 @@ app.post('/register', async (req, res, next) => {
     // res.send(req.body);
 })
 
-
-///Product Routes 
-app.get('/products',async (req,res)=>{
-    const products=await Product.find({});
-  
-    res.render('products/index',{products});
-})
-app.get('/products/pricesort1',async (req,res)=>{
-    const products=await Product.find({});
-    products.sort((a,b)=>
-    { return a.price-b.price;});
-    res.render('products/index',{products});
-})
-app.get('/products/pricesort2',async(req,res)=>{
-    const products=await Product.find({});
-    products.sort((a,b)=>
-    { return a.price-b.price;});
-    products.reverse();
-    res.render('products/index',{products});
-})
-app.get('/products/new',isLoggedIn, (req,res)=>{
-    res.render('products/new');
-})
-
-app.post('/products',async (req,res)=>{
-   // res.send(req.body);
-   const {name,price,image}=req.body;
-  // console.log(name,price,image);
-  const product=new Product({name,price,image});
-    await product.save();
-    req.flash('success','Product Created');
-    res.redirect('/products');
-
-})
-
-app.get('/products/:id',async(req,res)=>{
-    const{id}=req.params;
-    const product=await Product.findById(id);
-    res.render('products/show',{product});
-})
-
-app.delete('/products/:id', async(req,res)=>{
-    const {id}=req.params;
-    const product=await Product.findByIdAndDelete(id);
-    req.flash('success','Product Deleted');
-    res.redirect('/products');
-})
 
 app.get('/login', (req, res) => {
     res.render('Users/login.ejs');
@@ -252,6 +288,60 @@ app.get('/users/:userName', async(req, res) => {
         res.send("No such User Exists");
     }
 })
+
+app.get('/users/:userName/followers', isLoggedIn, async (req, res) => {
+    var userF = await User.findOne({ username: req.params.userName}).populate('followers').exec();
+    if (userF) {
+        res.render('Users/followers', {followers : userF.followers});
+    } else {
+        res.send("No such User Exists");
+    }
+})
+app.get('/users/:userName/following', isLoggedIn, async (req, res) => {
+    var userF = await User.findOne({ username: req.params.userName}).populate('following').exec();
+    if (userF) {
+        res.render('Users/following', {following : userF.following});
+    } else {
+        res.send("No such User Exists");
+    }
+})
+
+app.post('/users/:userName/follow', isLoggedIn, async (req, res) => {
+    const toFollowUsername = req.params.userName;
+    const toFollow = await User.findOne({ username: toFollowUsername }).exec();
+    const currUser = await User.findOne({ username: req.user.username }).populate('following').exec();
+    console.log(currUser.following)
+    for (let iam of currUser.following) {
+        if (iam.username == toFollowUsername) {
+            req.flash('error', 'Already following')
+            res.redirect('/')
+        }
+    }
+    toFollow.followers.push(currUser);
+    toFollow.save();
+    currUser.following.push(toFollow);
+    currUser.save();
+    req.flash('success', 'Followed Successfully')
+    res.redirect('/');
+    
+})
+
+app.get('/users',isLoggedIn,async (req,res)=>{
+    const users=await User.find({});
+    res.render('Users/meet',{users});
+})
+
+app.get('/logout', (req, res) => {
+    req.logout();
+    req.flash('success', "Goodbye!");
+    res.redirect('/posts');
+})
+
+
+app.listen(3000, () => {
+    console.log('Serving on port 3000')
+})
+
 
 // app.get("/users/:id/add", isLoggedIn, async(req, res) => {
 //     // First finding the logged in user
@@ -291,54 +381,3 @@ app.get('/users/:userName', async(req, res) => {
 //         }
 //     });
 // });
-
-app.get('/users/:userName/followers', isLoggedIn, async (req, res) => {
-    var userF = await User.findOne({ username: req.params.userName}).populate('followers').exec();
-    if (userF) {
-        res.render('Users/followers', {followers : userF.followers});
-    } else {
-        res.send("No such User Exists");
-    }
-})
-app.get('/users/:userName/following', isLoggedIn, async (req, res) => {
-    var userF = await User.findOne({ username: req.params.userName}).populate('following').exec();
-    if (userF) {
-        res.render('Users/following', {following : userF.following});
-    } else {
-        res.send("No such User Exists");
-    }
-})
-
-app.post('/users/:userName/follow', isLoggedIn, async (req, res) => {
-    const toFollowUsername = req.params.userName;
-    const toFollow = await User.findOne({ username: toFollowUsername }).exec();
-    const currUser = await User.findOne({ username: req.user.username }).populate('following').exec();
-    console.log(currUser.following)
-    for (let iam of currUser.following) {
-        if (iam.username == toFollowUsername) {
-            req.flash('error', 'Already following')
-            res.redirect('/')
-        }
-    }
-    toFollow.followers.push(currUser);
-    toFollow.save();
-    currUser.following.push(toFollow);
-    currUser.save();
-    req.flash('success', 'Followed Successfully')
-    res.redirect('/');
-    
-})
-app.get('/users',isLoggedIn,async (req,res)=>{
-    const users=await User.find({});
-    res.render('Users/meet',{users});
-})
-app.get('/logout', (req, res) => {
-    req.logout();
-    req.flash('success', "Goodbye!");
-    res.redirect('/posts');
-})
-
-
-app.listen(3000, () => {
-    console.log('Serving on port 3000')
-})

@@ -1,8 +1,10 @@
 let mongoose=require('mongoose');
 let Schema=mongoose.Schema;
+const Post = require('./post');
+
 let productSchema=new Schema({
     category:{
-        type:mongoose.SchemaTypes.ObjectId,
+        type:Schema.Types.ObjectId,
         ref:'Category'
         
     },
@@ -16,7 +18,11 @@ let productSchema=new Schema({
     },
     image:{
         type:String,
-    }
+    },
+    posts:[{
+        type:Schema.Types.ObjectId,
+        ref:'Post'
+    }]
 
 });
 module.exports=mongoose.model("Product",productSchema);

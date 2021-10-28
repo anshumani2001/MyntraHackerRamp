@@ -35,7 +35,11 @@ const PostSchema = new Schema({
     comments: [{
             type: Schema.Types.ObjectId,
             ref: 'Comment'
-    }]
+    }],
+    product:{
+        type:Schema.Types.ObjectId,
+        ref:'product'
+    }
 }, opts);
 
 PostSchema.post('findOneAndDelete', async function (doc) {
