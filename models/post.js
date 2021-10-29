@@ -14,7 +14,7 @@ const ImageSchema = new Schema({
 const opts = { toJSON: { virtuals: true } };
 
 const PostSchema = new Schema({
-    image: { type: String },
+    
     description: String,
     author: {
         type: Schema.Types.ObjectId,
@@ -44,7 +44,13 @@ const PostSchema = new Schema({
         type: String,
         default: 'Public',
         enum: ['Public', 'Private']
-    }
+    },
+    images:[
+        {
+            url:String,
+            filename:String
+        }
+    ]
 }, opts);
 
 PostSchema.post('findOneAndDelete', async function (doc) {

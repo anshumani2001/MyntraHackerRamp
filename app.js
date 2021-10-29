@@ -1,3 +1,7 @@
+if(process.env.NODE_ENV!='production')
+{
+    require('dotenv').config();
+}
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
@@ -12,11 +16,13 @@ const User = require('./models/user');
 const { isLoggedIn } = require('./middleware');
 const Product=require('./models/product');
 const app = express();
+const multer=require('multer');
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const { findById } = require('./models/comment');
-
+const {storage}=require('./cloudinary');
+const upload=multer({storage})
 const dbUrl = 'mongodb://localhost:27017/hackerramp2';
 
 mongoose.connect(dbUrl, { useNewUrlParser: true });
@@ -90,15 +96,17 @@ app.get('/posts/new', isLoggedIn, (req, res) => {
     res.render('posts/new')
 })
 
-app.post('/posts', async (req, res) => {  //Post Req
-    const { description, images, isPrivate } = req.body;
+app.post('/posts',upload.array('image') ,async (req, res) => {  //Post Req
+    const { description,  isPrivate } = req.body;
+    console.log(req.body,req.files);
     // console.log(description, images)
-    const newPost = new Post({ description, images, isPrivate });
-    newPost.author = req.user._id;
-    await newPost.save();
-    // console.log(newPost)
-    req.flash('success', 'Posted the post');
-    res.redirect('/posts')
+    const newPost = new Post({ description,  isPrivate });
+   newPost.images=req.files.map(f=>({url:f.path,filename:f.filename}));
+   newPost.author = req.user._id;
+   await newPost.save();
+    console.log(newPost)
+   req.flash('success', 'Posted the post');
+   res.redirect('/posts')
     // res.send(req.body);
     // res.send('Post request after creating a <post>');
 })
@@ -202,11 +210,15 @@ app.get('/products/new',isLoggedIn, (req,res)=>{
     res.render('products/new');
 })
 
-app.post('/products',async (req,res)=>{
+app.post('/products',upload.array('image'),async (req,res)=>{
    // res.send(req.body);
    const {name,price,image}=req.body;
   // console.log(name,price,image);
-  const product=new Product({name,price,image});
+  
+  console.log(req.body,req.files);
+
+  const product=new Product({name,price});
+  product.images=req.files.map(f=>({url:f.path,filename:f.filename}));
     await product.save();
     req.flash('success','Product Created');
     res.redirect('/products');

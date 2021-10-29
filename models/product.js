@@ -3,11 +3,7 @@ let Schema=mongoose.Schema;
 const Post = require('./post');
 
 let productSchema=new Schema({
-    category:{
-        type:Schema.Types.ObjectId,
-        ref:'Category'
-        
-    },
+    
     name:{
         type:String,
         required:true
@@ -16,9 +12,14 @@ let productSchema=new Schema({
         type:Number,
         required:true
     },
-    image:{
-        type:String,
-    },
+    images:[
+        {
+            url:String,
+            filename:String
+        }
+    ],
+        
+    
     posts:[{
         type:Schema.Types.ObjectId,
         ref:'Post'

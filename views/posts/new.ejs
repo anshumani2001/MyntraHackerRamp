@@ -2,20 +2,16 @@
 <div class="row">
     <h1 class="text-center">New post</h1>
     <div class="col-md-6 offset-md-3">
-        <form action="/posts" method="POST" >
+        <form action="/posts" method="POST" enctype="multipart/form-data" >
             <div class="mb-3">
                 <label class="form-label" for="description">Description</label>
                 <textarea class="form-control" type="text" id="description" name="description"
                     required></textarea>
             </div>
             <div class="mb-3">
-                <div class="form-file custom-file">
-                    <input type="file" class="form-file-input" id="images" name="images" multiple>
-                    <label class="form-file-label" for="image">
-                        <span class="form-file-text custom-file-label">Choose image(s)...</span>
-                        <span class="form-file-button">Browse</span>
-                    </label>
-                </div>
+                <label for="image" class="form-label">Image</label>
+                <input  type="file" name="image" id="image" multiple>
+               
             </div>
             <input type="checkbox" id="isPrivate" name="isPrivate" value="Private">
             <label for="isPrivate"> Allow only followers </label><br>

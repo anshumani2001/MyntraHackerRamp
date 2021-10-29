@@ -2,7 +2,7 @@
 <div class="row">
     <h1 class="text-center">Add a Product</h1>
     <div class="col-md-6 offset-md-3">
-        <form action="/products" method="POST">
+        <form action="/products" method="POST" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="name" class="form-label">Name:</label>
                 <input class="form-control" type="text" name="name" id="name" required autofocus>
@@ -12,8 +12,8 @@
                 <input class="form-control" type="number" name="price" id="price" required>
             </div>
             <div class="mb-3">
-                <label for="image" class="form-label">Image Url:</label>
-                <input class="form-control" type="text" name="image" id="image" required >
+                <label for="image" class="form-label">Image</label>
+                <input  type="file" name="image" id="image" multiple>
             </div>
             <div class="mb-3">
                 <button class="btn btn-success">Add Product</button>
