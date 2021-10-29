@@ -3,12 +3,25 @@
     <div class="row">
         <div class="text-left">
             <div class="col-6 offset-3">
-    <form action="/posts/<%=post._id%>?_method=PUT" method="POST" class="needs-validation"  novalidate >
+    <form action="/posts/<%=post._id%>?_method=PUT" method="POST" enctype="multipart/form-data">
         <div class="mb-3">
             <label class="form-label" for="description">Description</label>
-            <textarea class="form-control" type="text" id="description" name="description"
-               value="<%= post.description %> "  required > </textarea>
+            <textarea class="form-control" type="text" id="description" name="post[description]"
+              required><%= post.description %></textarea>
         </div>
+        <div class="mb-3">
+          <label for="formFileMultiple" class="form-label">Add image(s)</label>
+          <input class="form-control" type="file" id="formFileMultiple" name='image' multiple>
+      </div>
+      <div class="mb-3">
+        <% post.images.forEach(function(img,i) { %>
+            <img src="<%=img.thumbnail%>" class='img-thumbnail' alt="">
+            <div class="form-check-inline">
+                <input type="checkbox" name="deleteImages[]" id="image-<%=i%>" value="<%=img.filename%>">
+            </div>
+            <label for="image-<%=i%>">Delete?</label>
+            <% }) %>  
+    </div>
         <button class="btn btn-success">Submit</button>
         </form>
      <script>

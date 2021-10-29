@@ -21,7 +21,7 @@ const multer=require('multer');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const { findById } = require('./models/comment');
-const {storage}=require('./cloudinary');
+const {cloudinary,storage}=require('./cloudinary');
 const upload=multer({storage})
 const dbUrl = 'mongodb://localhost:27017/hackerramp2';
 
@@ -126,11 +126,19 @@ app.get('/posts/:id/edit', isLoggedIn, async (req, res) => {
     res.render('posts/edit', { post });
 })
 
-app.put('/posts/:id', async (req, res) => { //EDIT
+app.put('/posts/:id',upload.array('image'), async (req, res) => { //EDIT
     const { id } = req.params;
     // console.log(req.body);
-    const post = await Post.findByIdAndUpdate(id, { description: req.body.description });
+    const post = await Post.findByIdAndUpdate(id, { ...req.body.post });
+    const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
+    post.images.push(...imgs);
     await post.save();
+    if (req.body.deleteImages) {
+        for (let filename of req.body.deleteImages) {
+            await cloudinary.uploader.destroy(filename);
+        }
+        await post.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } })
+    }
     req.flash('success', "Post Edited")
     res.redirect('/posts/' + post._id);
 
