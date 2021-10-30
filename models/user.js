@@ -34,7 +34,17 @@ const UserSchema = new Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
         }
-    ]
+    ],
+    myChats: [{
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+        },
+        chat: {
+            type: Schema.Types.ObjectId,
+            ref: 'chats'
+        }
+    }]
     
 });
 

@@ -5,9 +5,14 @@
 <form class="mb-3 d-inline" action="/users/<%=userF.username%>/following" method="GET">
     <button class="btn btn-secondary">Following</button> 
 </form>
+<% if((currentUser && userF.username != currentUser.username) || (!currentUser)){ %>
+<form class="mb-3 d-inline" action="/chatWith/<%=userF._id%>" method="GET">
+    <button class="btn btn-dark">Chat</button> 
+</form>
 <form class="mb-3 d-inline" action="/users/<%=userF.username%>/follow" method="POST">
     <button class="btn btn-success">Follow </button>
 </form>
+<%}%>
 <h1><a href="/users/<%= userF.username %>"><%= userF.firstname + " " + userF.secondname %></a></h1>
     <% for( let post of userPosts ) { %>
         <div class="card mb-3">

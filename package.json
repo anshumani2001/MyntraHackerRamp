@@ -23,6 +23,8 @@
     "multer-storage-cloudinary": "^4.0.0",
     "passport": "^0.5.0",
     "passport-local": "^1.0.0",
-    "passport-local-mongoose": "^6.1.0"
+    "passport-local-mongoose": "^6.1.0",
+    "peer": "^0.6.1",
+    "socket.io": "^4.3.1"
   }
 }

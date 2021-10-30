@@ -3,6 +3,9 @@ if(process.env.NODE_ENV!='production')
     require('dotenv').config();
 }
 const express = require('express');
+const app = express();
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 const mongoose = require('mongoose');
 const path = require('path');
 const Post = require('./models/post');
@@ -13,9 +16,9 @@ const flash = require('connect-flash');
 const ExpressError = require('./utils/ExpressError');
 const ejsMate = require('ejs-mate');
 const User = require('./models/user');
+const Chats = require('./models/Chats');
 const { isLoggedIn } = require('./middleware');
 const Product=require('./models/product');
-const app = express();
 const multer=require('multer');
 
 const passport = require('passport');
@@ -55,7 +58,13 @@ app.use(session(sessionConfig))
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.static(path.join(__dirname,'public')));
+app.use(express.static(path.join(__dirname, 'public')));
+
+const { ExpressPeerServer } = require('peer');
+const peerServer = ExpressPeerServer(server, {
+    debug: true
+});
+app.use('/peerjs', peerServer)
 
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
@@ -405,8 +414,68 @@ app.get('/logout', (req, res) => {
     res.redirect('/posts');
 })
 
+app.get('/chatwith/:id', isLoggedIn, async (req, res) => {
+    let currUser = await User.findOne({ username: req.user.username }).populate('myChats.chat').populate('myChats.user').exec();
+    let otherUser = await User.findById(req.params.id);
+    for (let chat of currUser.myChats) {
+        if (chat.user._id + " " == req.params.id+" ") {
+            res.redirect(`/chat/${chat.chat._id}`)
+            // res.send("******");
+            return;
+        }
+    }
+    let newChat = new Chats({ user1: currUser, user2: otherUser });
+    console.log(newChat);
+    await newChat.save();
+    let newChatForUSer1 = {
+        user: otherUser,
+        chat: newChat
+    }
+    let newChatForUSer2 = {
+        user: currUser,
+        chat: newChat
+    }
+    currUser.myChats.push(newChatForUSer1);
+    await currUser.save();
+    otherUser.myChats.push(newChatForUSer2);
+    await otherUser.save();
+    res.redirect(`/chat/${newChat._id}`)
+    // res.send("########")
 
-app.listen(3000, () => {
+})
+
+
+app.get('/chat/:id', isLoggedIn, async(req, res) => {
+    ROOM_ID = req.params.room;
+    // res.render('chat', {room: req.params.room})
+    var chatF = await Chats.findById(req.params.id).populate('user1').populate('user2').exec();
+    if (chatF) {
+        res.render('chat', { chatF, uname: req.user.username, roomId: chatF._id });
+    } else {
+        req.flash('error', 'Error')
+        res.redirect('/');
+    }
+})
+
+io.on('connection', socket => {
+    socket.on('join-room', (roomId, userId) => {
+        socket.join(roomId);
+        socket.to(roomId).emit('user-connected', userId);
+        socket.on('message', async(message) => {
+            console.log(message, "app.js ")
+            var newMsg = message
+            newMsg.sentAt = Date.now();
+            // var x = newMsg.sentAt + ' ';
+            await Chats.findByIdAndUpdate(roomId, { $push: { "messages": newMsg } });
+            io.to(roomId).emit('createMessage', message)
+        });
+        socket.on('disconnect', () => {
+            socket.to(roomId).emit('user-disconnected', userId)
+        });
+    })
+})
+
+server.listen(3000, () => {
     console.log('Serving on port 3000')
 })
 
