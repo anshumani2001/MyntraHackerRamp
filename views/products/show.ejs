@@ -55,19 +55,16 @@
         <% let posts = product.posts %> 
         <!-- <div class="card mb-3"> -->
             <div class="row">
-                <form action="/products/<%= product.id %> " method="POST" >
+                <form action="/products/<%= product.id %> " method="POST" enctype="multipart/form-data" >
                     <div class="mb-3">
                         <label class="form-label" for="description">Description</label>
                         <textarea class="form-control" type="text" id="description" name="description"
                             required></textarea>
                     </div>
                     <div class="mb-3">
-                        <div class="form-file custom-file">
-                            <input type="file" class="form-file-input" id="images" name="images" multiple>
-                            <label class="form-file-label" for="image">
-                                <span class="form-file-text custom-file-label">Choose image(s)...</span>
-                                <span class="form-file-button">Browse</span>
-                            </label>
+                        <div class="mb-3">
+                            <label for="formFileMultiple" class="form-label">Add image(s)</label>
+                            <input class="form-control" type="file" id="formFileMultiple" name='image' multiple>
                         </div>
                     </div>
                     <input type="checkbox" id="isPrivate" name="isPrivate" value="Private">
@@ -84,8 +81,8 @@
             <div class="card mb-3">
                 <div class="row">
                     <div class="col-md-4">
-                        <% if(post.image){ %>
-                            <img src="<%=post.image%>" alt="" class="img-fluid">
+                        <% if(post.images.length>0){ %>
+                            <img src="<%=post.images[0].url%>" alt="" class="img-fluid h-100">
                         <% }else{ %>
                             <img src="https://source.unsplash.com/collection/3356576/1600x900"
                                 alt="" class="img-fluid">

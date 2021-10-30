@@ -55,6 +55,7 @@ app.use(session(sessionConfig))
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(express.static(path.join(__dirname,'public')));
 
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
@@ -220,7 +221,7 @@ app.get('/products/new',isLoggedIn, (req,res)=>{
 
 app.post('/products',upload.array('image'),async (req,res)=>{
    // res.send(req.body);
-   const {name,price,image}=req.body;
+   const {name,price}=req.body;
   // console.log(name,price,image);
   
   console.log(req.body,req.files);
@@ -271,13 +272,14 @@ app.get('/products/:id/newpost',isLoggedIn,(req,res)=>{
     res.render('products/newpost',{productid:req.params.id});
 })
 
-app.post('/products/:id/',isLoggedIn,async(req,res)=>{
-    const { description, images, isPrivate } = req.body;
-    const newPost = new Post({ description, images, isPrivate });
+app.post('/products/:id/',isLoggedIn, upload.array('image') ,async(req,res)=>{
+    const { description, isPrivate } = req.body;
+    console.log(req.files);
+    const newPost = new Post({ description, isPrivate });
     const currProduct = await Product.findById(req.params.id);
+    newPost.images = req.files.map(f=>({url:f.path,filename:f.filename}));
     newPost.author = req.user._id;
     newPost.product = req.params.id;
-    
     currProduct.posts.push(newPost);
     await newPost.save();
     await currProduct.save();
