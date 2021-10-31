@@ -38,11 +38,7 @@
             <%# var prevD = `00/00/0000` %> 
             <% const zeroPad = (num, places) => String(num).padStart(places, '0') %> 
             <% let prevD %> 
-            <% if(chatF.messages.length==0){ %>
-                <li class="font-weight-bold" style="text-align:center;">
-                    <small>Today</small>
-                </li>
-            <%} %>
+            <% var tod = false %>
             <% for(let message of chatF.messages){ %>
                <% const dateTemp = new Date(message.sentAt); %> 
                <% const dateToday = new Date() %>
@@ -57,6 +53,7 @@
                   <li class="font-weight-bold" style="text-align:center;">
                      <% if(msgD===TD) {%>
                         <small>Today</small>
+                        <% tod = true %>
                         <% } else { %>
                         <small><%= msgD %></small>
                      <% } %>
@@ -72,6 +69,11 @@
                   <small> <%= message.message %></small>
                </li>
             <% } %>  
+            <% if(!tod) {%>
+               <li class="font-weight-bold" style="text-align:center;">
+               <small>Today</small>
+            </li>
+               <% } %>
          </ul>
       </div>
       <div class="main__message_container">
