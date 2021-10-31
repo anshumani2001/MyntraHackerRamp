@@ -1,31 +1,23 @@
 <% layout('layouts/boilerplate') %>
 
     <% for( let post of posts ) { %>
-        <div class="card mb-3">
-            <div class="row">
-                <div class="col-md-4">
-                    <% if(post.images.length>0){ %>
-                        <img src="<%=post.images[0].url%>" alt="" class="img-fluid">
-                    <% }else{ %>
-                        <img src="https://source.unsplash.com/collection/3356576/1600x900"
-                            alt="" class="img-fluid">
-                    <% } %>
-                </div>
-                <div class="col-md-8">
+        <div class="row">
+            <div class="col-6 offset-3">
+                <div class="card mb-3">
+                    <% if(post.images.length>0){ %> 
+                    <img src="<%= post.images[0].url%>" class="card-img-top" alt="...">
+                    <% } else { %> 
+                        <img src="https://source.unsplash.com/collection/3356576/1600x900" class="card-img-top" alt="...">
+                    <% } %> 
                     <div class="card-body">
-                        <h5 class="card-title">
-                            <a href="/users/<%= post.author.username %>"><%= post.author.firstname + " " + post.author.secondname %></a>
-                        </h5>
-                        <p class="card-text">
-                            <%= post.description %>
-                        </p>
-                        <p class="card-text">
-                            <small class="text-muted">
-                                <%= post.likes %>
-                            </small>
-                        </p>
-                        <a href="/posts/<%= post.id %> " class="btn btn-primary">View%> </a>
+                        <h5 class="card-title"><a href="/users/<%=post.author.username%> "><%= post.author.firstname + " " + post.author.secondname %> </a> </h5>
+                        <p class="card-text"><%= post.description%></p>
                     </div>
+                    <div class="card-body">
+                        <a href="/posts/<%= post.id %> " class="btn btn-primary">View Post </a>
+                        
+                    </div>
+                
                 </div>
             </div>
         </div>
