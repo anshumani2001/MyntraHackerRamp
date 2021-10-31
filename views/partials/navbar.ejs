@@ -1,20 +1,21 @@
+
 <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-danger">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Myntra</a>
+        <a class="navbar-brand" href="/">Myntra</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-link" href="/">Home</a>
+                
                 <a class="nav-link" href="/posts">Posts</a>
                 <a class="nav-link" href="/posts/new">New Post</a>
                 <a class="nav-link" href="/products/">Products</a>
                 <a class="nav-link" href="/products/new">Add product</a>
                 <a class="nav-link" href="/users">Find a Friend</a>
             </div>
-            <div class="navbar-nav ms-auto">
+            <div class="navbar-nav ml-auto">
                 <% if(!currentUser) {%>
                     <a class="nav-link" href="/login">Login</a>
                     <a class="nav-link" href="/register">Register</a>
@@ -25,3 +26,23 @@
         </div>
     </div>
 </nav>
+<style>
+    .nav-link {
+        padding: 0.25rem 0;
+        font-weight: 700;
+        color: white;
+        margin-left: 1rem;
+        border-bottom: 0.25rem solid transparent;
+    }
+    
+    .nav-link:hover{
+        color: white;
+        border-bottom-color:white;
+    }
+    
+    .nav-link.active {
+        color: white;
+        border-bottom-color:white;
+    
+    }
+</style>
