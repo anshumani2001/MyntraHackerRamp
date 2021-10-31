@@ -411,7 +411,7 @@ app.get('/users',isLoggedIn,async (req,res)=>{
 app.get('/logout', (req, res) => {
     req.logout();
     req.flash('success', "Goodbye!");
-    res.redirect('/posts');
+    res.redirect('/');
 })
 
 app.get('/chatwith/:id', isLoggedIn, async (req, res) => {
