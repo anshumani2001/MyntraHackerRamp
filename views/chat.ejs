@@ -21,20 +21,22 @@
     <script>
       const ROOM_ID = "<%= roomId %>";
       var uName = "<%= uname %>"; 
+      var thisuser = "<%= currentUser.username %>"; 
     </script>
 </head>
 <body>
    <%- include('./partials/navbar')%>
-   <%- include('./partials/flash')%>
 <div class="main">
    <div class="main__left home">
    </div>
-   <div class="main__mid bg-dark">
-      <div class="main__header">
-         <h5><%# msgHistory.meetName %></h5> 
-      </div>
-      <div class="main__chat_window">
-         <ul class="messages">  
+   <div class="main__mid bg-light">
+      <div class="selected-user">
+         <span>To: <span class="name"><%= ((currentUser.username == chatF.user1.username) ? chatF.user2.firstname + " " + chatF.user2.secondname  :  chatF.user1.firstname + " " + chatF.user1.secondname);%></span></span>
+     </div>
+      <div class="main__chat_window chat-container">
+         <ul class="messages chat-box chatContainerScroll">
+             
+           
             <%# var prevD = `00/00/0000` %> 
             <% const zeroPad = (num, places) => String(num).padStart(places, '0') %> 
             <% let prevD %> 
@@ -59,15 +61,25 @@
                      <% } %>
                </li>
                <%} prevD = msgD; %> 
-               <li class="message d-flex align-items-center justify-content-between mb-1">
-                  <small><b><%= message.sentBy %></b></small>
-                  <small class="small font-weight-bold">
-                     <%= msgT %>
-                  </small>
-               </li>
-               <li  class="message align-items-center  mb-1">
-                  <small> <%= message.message %></small>
-               </li>
+               <% if(currentUser.username == message.sentBy){ %>
+                  <li class="chat-right">
+                     <div class="chat-hour" style="font-size: large;"><%= msgT %></div>
+                     <div class="chat-text" style="font-size: large;"><%= message.message %></div>
+                     <div class="chat-avatar">
+                     <!-- <img src="https://www.bootdey.com/img/Content/avatar/avatar3.png" alt="Retail Admin"> -->
+                     <div class="chat-name" style="font-size: large;"><%= message.sentBy %></div>
+                     </div>
+                  </li> 
+                 <% } else { %>
+                  <li class="chat-left">
+                     <div class="chat-avatar">
+                     <!-- <img src="https://www.bootdey.com/img/Content/avatar/avatar3.png" alt="Retail Admin"> -->
+                     <div class="chat-name" style="font-size: large;"><%= message.sentBy %></div>
+                     </div>
+                     <div class="chat-text" style="font-size: large;"><%= message.message %></div>
+                     <div class="chat-hour" style="font-size: large;"><%= msgT %></div>
+                  </li> 
+                  <% } %>
             <% } %>  
             <% if(!tod) {%>
                <li class="font-weight-bold" style="text-align:center;">
@@ -80,10 +92,8 @@
          <input id="chat_message" type="text" placeholder="Type message here...">
       </div>
    </div>
-   <div class="main__right bg-dark">
-    <p><%= chatF.user1.firstname + " " + chatF.user1.secondname %></p>
-    <p><%= chatF.user2.firstname + " " + chatF.user2.secondname %></p>
-    <!-- <p></p> -->
+   <div class="main__right">
+
    </div>
 
 </div>

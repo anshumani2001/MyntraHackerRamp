@@ -1,6 +1,6 @@
 const socket = io('/');
 const partcipantList = document.getElementById('participants__list');
-
+let tUserId;
 var peer = new Peer(undefined, {
     path: "/peerjs",
     host: '/',
@@ -35,15 +35,27 @@ if (e.which == 13 && text.val().length !== 0) {
       console.log(msgDate)
       const msgT = `${zeroPad(msgDate.getHours(), 2)}:${zeroPad(msgDate.getMinutes(),2)}`
       const msgD = `${zeroPad(msgDate.getDate(), 2)}/${zeroPad(msgDate.getMonth(), 2)}/${zeroPad(msgDate.getFullYear(), 4)}`
-      const msgHTML = `<li class="message d-flex align-items-center justify-content-between mb-1">
-                          <small><b>${message.sentBy}</b></small>
-                          <small class="small font-weight-bold">
-                            ${msgT}
-                          </small>
-                       </li>
-                       <li  class="message align-items-center  mb-1">
-                          <small>${message.message}</small>
-                       </li>`;
+      let msgHTML
+      console.log(message.userId)
+      if (message.userId == tUserId) {
+          msgHTML = `<li class="chat-right">
+          <div class="chat-hour" style="font-size: large;">${msgT}</div>
+          <div class="chat-text" style="font-size: large;">${message.message}</div>
+          <div class="chat-avatar">
+          <!-- <img src="https://www.bootdey.com/img/Content/avatar/avatar3.png" alt="Retail Admin"> -->
+          <div class="chat-name" style="font-size: large;">${message.sentBy}</div>
+          </div>
+       </li> `
+      } else {
+        msgHTML = `<li class="chat-left">
+                       <div class="chat-avatar">
+                       <!-- <img src="https://www.bootdey.com/img/Content/avatar/avatar3.png" alt="Retail Admin"> -->
+                       <div class="chat-name" style="font-size: large;">${message.sentBy}</div>
+                       </div>
+                       <div class="chat-text" style="font-size: large;">${message.message}</div>
+                       <div class="chat-hour" style="font-size: large;">${msgT}</div>
+                    </li> `;
+      }
       $(".messages").append(msgHTML);
         scrollToBottom()
     })
@@ -53,6 +65,7 @@ socket.on('user-disconnected', userId => {
         peers[userId].close()
   })
 peer.on('open', id => {
+  tUserId = id;
     console.log(id);
     socket.emit('join-room', ROOM_ID, id);
 })
@@ -62,5 +75,5 @@ const scrollToBottom = () => {
     var d = $('.main__chat_window');
     d.scrollTop(d.prop("scrollHeight"));
 }
-  
+console.log(thisuser)
 scrollToBottom()

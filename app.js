@@ -457,6 +457,7 @@ app.get('/chat/:id', isLoggedIn, async(req, res) => {
     }
 })
 
+
 io.on('connection', socket => {
     socket.on('join-room', (roomId, userId) => {
         socket.join(roomId);
@@ -464,6 +465,7 @@ io.on('connection', socket => {
         socket.on('message', async(message) => {
             console.log(message, "app.js ")
             var newMsg = message
+            message.userId = userId
             newMsg.sentAt = Date.now();
             // var x = newMsg.sentAt + ' ';
             await Chats.findByIdAndUpdate(roomId, { $push: { "messages": newMsg } });
@@ -474,6 +476,7 @@ io.on('connection', socket => {
         });
     })
 })
+
 
 server.listen(3000, () => {
     console.log('Serving on port 3000')
