@@ -1,14 +1,13 @@
-
 <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-danger">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">Myntra</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                
+
                 <a class="nav-link" href="/posts">Posts</a>
                 <a class="nav-link" href="/posts/new">New Post</a>
                 <a class="nav-link" href="/products/">Products</a>
@@ -19,9 +18,9 @@
                 <% if(!currentUser) {%>
                     <a class="nav-link" href="/login">Login</a>
                     <a class="nav-link" href="/register">Register</a>
-                <% } else {%>
-                    <a class="nav-link" href="/logout">Logout</a>
-                <% } %>
+                    <% } else {%>
+                        <a class="nav-link" href="/logout">Logout</a>
+                        <% } %>
             </div>
         </div>
     </div>
@@ -34,15 +33,15 @@
         margin-left: 1rem;
         border-bottom: 0.25rem solid transparent;
     }
-    
-    .nav-link:hover{
+
+    .nav-link:hover {
         color: white;
-        border-bottom-color:white;
+        border-bottom-color: white;
     }
-    
+
     .nav-link.active {
         color: white;
-        border-bottom-color:white;
-    
+        border-bottom-color: white;
+
     }
 </style>
