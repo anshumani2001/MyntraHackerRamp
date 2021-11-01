@@ -28,7 +28,9 @@
                 <div class="col-md-8">
                     <div class="card-body">
                         <h5 class="card-title">
-                            <%= post.author.username %>
+                            <a href="/users/<%= post.author.username %>">
+                            <%= post.author.firstname + " " + post.author.secondname %>
+                        </a>
                         </h5>
                         <p class="card-text">
                             <%= post.description %>
