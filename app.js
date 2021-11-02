@@ -20,7 +20,7 @@ const Chats = require('./models/Chats');
 const { isLoggedIn } = require('./middleware');
 const Product=require('./models/product');
 const multer=require('multer');
-
+const products=require('./routes/product');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const { findById } = require('./models/comment');
@@ -200,105 +200,7 @@ app.delete('/posts/:id', async (req, res) => { //DELETE
 
 
 ///Product Routes 
-app.get('/products',async (req,res)=>{
-    const products=await Product.find({});
-    const {prsearch}=req.query;
-    if(prsearch==1)
-    {
-        products.sort((a,b)=>
-    { return a.price-b.price;});
-    }
-    if(prsearch==2)
-    {
-        products.sort((a,b)=>
-    { return a.price-b.price;});
-    products.reverse();
-    }
-        
-    if(prsearch==3)
-    {
-        products.sort((a,b)=>
-    { return a.deliverytime-b.deliverytime;});
-    }
-    
-    res.render('products/index',{products,prsearch});
-})
-
-
-app.get('/products/new',isLoggedIn, (req,res)=>{
-    res.render('products/new');
-})
-
-app.post('/products',upload.array('image'),async (req,res)=>{
-   // res.send(req.body);
-   const {name,price}=req.body;
-  // console.log(name,price,image);
-  
-  console.log(req.body,req.files);
-
-  const product=new Product({name,price});
-  product.images=req.files.map(f=>({url:f.path,filename:f.filename}));
-    await product.save();
-    req.flash('success','Product Created');
-    res.redirect('/products');
-
-})
-
-app.get('/products/:id',async(req,res)=>{
-    const{id}=req.params;
-    const product=await Product.findById(id).populate({
-        path: 'posts',
-        populate: {
-            path: 'author'
-        }
-    });
-    let posts = product.posts;
-    let visiblePosts = []
-    for (let post of posts) {
-        if (req.user && post.author.username == req.user.username && post.author && req.user) {
-            visiblePosts.push(post);
-        }
-        else if (post.isPrivate && post.isPrivate == 'Private') {
-            // console.log(post.isPrivate, req.user)
-            if (req.user && post.author.followers.includes(req.user._id)) {
-                visiblePosts.push(post);
-            }
-        } else {
-            visiblePosts.push(post);
-        }
-    }
-    product.posts = visiblePosts
-    res.render('products/show',{product});
-})
-
-app.delete('/products/:id', async(req,res)=>{
-    const {id}=req.params;
-    const product=await Product.findByIdAndDelete(id);
-    req.flash('success','Product Deleted');
-    res.redirect('/products');
-})
-
-app.get('/products/:id/newpost',isLoggedIn,(req,res)=>{
-    res.render('products/newpost',{productid:req.params.id});
-})
-
-app.post('/products/:id/',isLoggedIn, upload.array('image') ,async(req,res)=>{
-    const { description, isPrivate } = req.body;
-    console.log(req.files);
-    const newPost = new Post({ description, isPrivate });
-    const currProduct = await Product.findById(req.params.id);
-    newPost.images = req.files.map(f=>({url:f.path,filename:f.filename}));
-    newPost.author = req.user._id;
-    newPost.product = req.params.id;
-    currProduct.posts.push(newPost);
-    await newPost.save();
-    await currProduct.save();
-    req.flash('success', 'Posted the post');
-    res.redirect(`/products/${req.params.id}`)
-    // res.send(req.body);
-    // res.send('Post request after creating a <post>');
-})
-
+app.use('/products',products);
 
 //USER ROUTES
 
