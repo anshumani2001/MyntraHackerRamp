@@ -391,7 +391,7 @@ app.post('/users/:userName/follow', isLoggedIn, async (req, res) => {
     for (let iam of currUser.following) {
         if (iam.username == toFollowUsername) {
             req.flash('error', 'Already following')
-            res.redirect('/')
+            return res.redirect(`/users/${toFollowUsername}`)
         }
     }
     toFollow.followers.push(currUser);
@@ -399,7 +399,7 @@ app.post('/users/:userName/follow', isLoggedIn, async (req, res) => {
     currUser.following.push(toFollow);
     currUser.save();
     req.flash('success', 'Followed Successfully')
-    res.redirect('/');
+    res.redirect(`/users/${toFollowUsername}`);
     
 })
 
