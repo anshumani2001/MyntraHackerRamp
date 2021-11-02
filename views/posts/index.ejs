@@ -8,7 +8,7 @@
                 
                 <% }else {%> 
                     <div class="mb-3">
-                        <a class="" href="/users/<%=user.username%> "><%=user.firstname + " " + user.secondname%></a>
+                        <a class="text-decoration-none" href="/users/<%=user.username%> "><%=user.firstname + " " + user.secondname%></a>
                         <form class="d-inline" action="/users/<%=user.username%>/follow" method="POST">
                             <button class="btn btn-primary btn-sm">Follow </button>
                         </form>
@@ -21,7 +21,7 @@
     <% for( let post of posts ) { %>
         <div class="row">
             <div class="col-8">
-                <div class="card mb-3 border-0 shadow-lg rounded-3">
+                <div class="card mb-3 border-0 shadow-lg rounded-3 tran">
                     <% if(post.images.length>0){ %> 
                     <img src="<%= post.images[0].url%>" class="card-img-top" alt="...">
                     <% } else { %> 
@@ -36,11 +36,9 @@
                                 <%= post.description %>
                              <% } %> 
                         </p>
-                    </div>
-                    <div class="card-body">
                         <a href="/posts/<%= post.id %> " class="btn btn-primary">View Post </a>
-                        
                     </div>
+
                 
                 </div>
             </div>

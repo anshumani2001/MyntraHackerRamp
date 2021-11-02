@@ -1,5 +1,5 @@
 <% layout('layouts/boilerplate') %>
-<div class="mb-3">
+
     <h1><%= userF.firstname + " " + userF.secondname %></h1>  
     <form class="mb-3 d-inline" action="/users/<%=userF.username%>/followers" method="GET">
         <button class="btn btn-primary btn-sm">Followers</button> 
@@ -14,13 +14,13 @@
     <form class="mb-3 d-inline" action="/users/<%=userF.username%>/follow" method="POST">
         <button class="btn btn-success btn-sm">Follow </button>
     </form>
-</div>
+
 <br>
 <%}%>
 <% for( let post of userPosts ) { %>
     <div class="row">
         <div class="col-6 offset-3">
-            <div class="card mb-3">
+            <div class="card mb-3 border-0 shadow-lg rounded-3">
                 <% if(post.images.length>0){ %> 
                 <img src="<%= post.images[0].url%>" class="card-img-top" alt="...">
                 <% } else { %> 
@@ -42,3 +42,14 @@
         </div>
     </div>
     <% } %>
+    <style>
+        body{
+            background-color:#e9ecef;
+            background-image: url("https://images.pexels.com/photos/1054777/pexels-photo-1054777.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            height: 500px;
+        }
+        
+    </style>

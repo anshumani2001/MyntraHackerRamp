@@ -17,7 +17,7 @@
     <div class="row align-items-center">
         <% for (let product of products){%>
             <div class="col-md-4">
-                <div class="card mb-3">
+                <div class="card mb-3 border-0 shadow-lg rounded-3 tran">
                     <%if(product.images.length) {%>
                         <img class="img-fluid" alt="" src="<%=product.images[0].url%>">
                     <% }else {%>
