@@ -20,7 +20,8 @@ const Chats = require('./models/Chats');
 const { isLoggedIn } = require('./middleware');
 const Product=require('./models/product');
 const multer=require('multer');
-const products=require('./routes/product');
+const products = require('./routes/product');
+const userRoutes = require('./routes/users');  
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const { findById } = require('./models/comment');
@@ -202,42 +203,10 @@ app.delete('/posts/:id', async (req, res) => { //DELETE
 ///Product Routes 
 app.use('/products',products);
 
-//USER ROUTES
+//AUTH ROUTES
 
-app.get('/register', (req, res) => {
-    res.render('Users/register.ejs');
-})
+app.use('/', userRoutes)
 
-app.post('/register', async (req, res, next) => {
-    try {
-        const { firstname, lastname, email, username, password, age, gender } = req.body;
-        const user = new User({ firstname, secondname: lastname, email, username, age, gender });
-        const registeredUser = await User.register(user, password);
-        req.login(registeredUser, err => {
-            if (err) return next(err);
-            req.flash('success', 'Successfully registered!');
-            return res.redirect('/');
-        })
-    } catch (e) {
-        req.flash('error', e.message);
-        res.redirect('/register');
-    }
-    // res.send(req.body);
-})
-
-
-app.get('/login', (req, res) => {
-    res.render('Users/login.ejs');
-})
-
-app.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), async (req, res) => {
-    // console.log(req.user)
-    const redirectUrl = req.session.returnTo || '/posts';
-    delete req.session.returnTo;
-    req.flash('success', 'Welcome Back');
-    res.redirect(redirectUrl);
-    
-})
 
 app.get('/users/:userName', async(req, res) => {
     var userF = await User.findOne({ username: req.params.userName}).exec();
@@ -306,11 +275,6 @@ app.post('/users/:userName/follow', isLoggedIn, async (req, res) => {
     
 })
 
-app.get('/logout', (req, res) => {
-    req.logout();
-    req.flash('success', "Goodbye!");
-    res.redirect('/');
-})
 
 app.get('/chatwith/:id', isLoggedIn, async (req, res) => {
     let currUser = await User.findOne({ username: req.user.username }).populate('myChats.chat').populate('myChats.user').exec();
@@ -379,43 +343,3 @@ io.on('connection', socket => {
 server.listen(3000, () => {
     console.log('Serving on port 3000')
 })
-
-
-// app.get("/users/:id/add", isLoggedIn, async(req, res) => {
-//     // First finding the logged in user
-//     User.findById(req.user._id, (err, user) => {
-//         if (err) {
-//             console.log(err);
-//             req.flash(
-//                 "error",
-//                 "There has been an error adding this person to your friends list"
-//             );
-//             res.redirect("back");
-//         } else {
-//             // finding the user that needs to be added
-//             User.findById(req.params.id, async(err, foundUser) => {
-//                 if (err) {
-//                     console.log(err);
-//                     req.flash("error", "Person not found");
-//                     res.redirect("back");
-//                 } else {
-//                     // FOUNDUSER IS THE USER THAT THE LOGGED IN USER WANTS TO ADD
-//                     // USER IS THE CURRENT LOGGED IN USER
-
-//                     // checking if the user is already in foundUsers friend requests or friends list
-//                     if (foundUser.friends.find(o => o._id.equals(user._id))) {
-//                         req.flash("error", `You already follow ${user.firstName}`);
-//                         return res.redirect("back");
-//                     } 
-//                     let currUser = {_id: req.user._id, firstname: req.user.firstname, lastname: req.user.lastname};
-//                     let currU = await User.findById(req.user._id);
-//                     currU.friends.push(foundUser);
-//                     currU.save();
-//                     console.log(currU);
-//                     req.flash("success", `Success! You started folowing ${foundUser.firstname}`);
-//                     res.redirect("back");
-//                 }
-//             });
-//         }
-//     });
-// });
