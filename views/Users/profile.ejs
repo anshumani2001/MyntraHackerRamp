@@ -1,48 +1,38 @@
 <% layout('layouts/boilerplate') %>
-<form class="mb-3 d-inline" action="/users/<%=userF.username%>/followers" method="GET">
-    <button class="btn btn-primary">Followers</button> 
-</form>
-<form class="mb-3 d-inline" action="/users/<%=userF.username%>/following" method="GET">
-    <button class="btn btn-secondary">Following</button> 
-</form>
-<% if((currentUser && userF.username != currentUser.username) || (!currentUser)){ %>
-<form class="mb-3 d-inline" action="/chatWith/<%=userF._id%>" method="GET">
-    <button class="btn btn-dark">Chat</button> 
-</form>
-<form class="mb-3 d-inline" action="/users/<%=userF.username%>/follow" method="POST">
-    <button class="btn btn-success">Follow </button>
-</form>
+<div class="mb-3">
+    <h1><%= userF.firstname + " " + userF.secondname %></h1>  
+    <form class="mb-3 d-inline" action="/users/<%=userF.username%>/followers" method="GET">
+        <button class="btn btn-primary btn-sm">Followers</button> 
+    </form>
+    <form class="mb-3 d-inline" action="/users/<%=userF.username%>/following" method="GET">
+        <button class="btn btn-secondary btn-sm">Following</button> 
+    </form>
+    <% if((currentUser && userF.username != currentUser.username) || (!currentUser)){ %>
+    <form class="mb-3 d-inline" action="/chatWith/<%=userF._id%>" method="GET">
+        <button class="btn btn-dark btn-sm">Chat</button> 
+    </form>
+    <form class="mb-3 d-inline" action="/users/<%=userF.username%>/follow" method="POST">
+        <button class="btn btn-success btn-sm">Follow </button>
+    </form>
+</div>
+<br>
 <%}%>
-<h1><a href="/users/<%= userF.username %>"><%= userF.firstname + " " + userF.secondname %></a></h1>
-    <% for( let post of userPosts ) { %>
-        <div class="card mb-3">
-            <div class="row">
-                <div class="col-md-4">
-                    <% if(post.image){ %>
-                        <img src="<%=post.image%>" alt="" class="img-fluid">
-                    <% }else{ %>
-                        <img src="https://source.unsplash.com/collection/3356576/1600x900"
-                            alt="" class="img-fluid">
-                    <% } %>
+<% for( let post of userPosts ) { %>
+    <div class="row">
+        <div class="col-6 offset-3">
+            <div class="card mb-3">
+                <% if(post.images.length>0){ %> 
+                <img src="<%= post.images[0].url%>" class="card-img-top" alt="...">
+                <% } else { %> 
+                    <img src="https://source.unsplash.com/collection/3356576/1600x900" class="card-img-top" alt="...">
+                <% } %> 
+                <div class="card-body">
+                    <p class="card-text"><%= post.description%></p>
+                    <a href="/posts/<%= post.id %> " class="btn btn-primary">View Post </a>
+                    
                 </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <a href="/users/<%= post.author.username %>">
-                            <%= post.author.firstname + " " + post.author.secondname %>
-                        </a>
-                        </h5>
-                        <p class="card-text">
-                            <%= post.description %>
-                        </p>
-                        <p class="card-text">
-                            <small class="text-muted">
-                                <%= post.likes %>
-                            </small>
-                        </p>
-                        <a href="/posts/<%= post.id %> " class="btn btn-primary">View</a>
-                    </div>
-                </div>
+            
             </div>
         </div>
-        <% } %>
+    </div>
+    <% } %>

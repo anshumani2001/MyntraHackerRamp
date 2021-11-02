@@ -3,8 +3,7 @@
 
     <div class="mb-3">
         <div class="btn-group">
-            <button type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown"
-                aria-expanded="false">
+            <button type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                 Sort By
             </button>
             <ul class="dropdown-menu">
@@ -15,29 +14,24 @@
             </ul>
         </div>
     </div>
-    <% for (let product of products){%>
-        <div class="card mb-3">
-            <div class="row">
-                <div class="col-md-4">
+    <div class="row align-items-center">
+        <% for (let product of products){%>
+            <div class="col-md-4">
+                <div class="card mb-3">
                     <%if(product.images.length) {%>
                         <img class="img-fluid" alt="" src="<%=product.images[0].url%>">
-                        <% }else {%>
-                            <img class="img-fluid" alt=""
-                                src="https://res.cloudinary.com/douqbebwk/image/upload/v1600103881/YelpCamp/lz8jjv2gyynjil7lswf4.png">
-                            <% } %>
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <%= product.name %>
-                        </h5>
-
-                        <p class="card-text">
-                            <small class="text-muted">₹ <%= product.price%></small>
-                        </p>
-                        <a class="btn btn-primary" href="/products/<%=product._id%>">Buy Now</a>
-                    </div>
+                    <% }else {%>
+                        <img class="img-fluid" alt=""
+                            src="https://res.cloudinary.com/douqbebwk/image/upload/v1600103881/YelpCamp/lz8jjv2gyynjil7lswf4.png">
+                        <% } %>
+                            <div class="card-body">
+                                <h5 class="card-title"><%= product.name %></h5>
+                                <p class="card-text">
+                                    <small class="text-muted">₹ <%= product.price%></small>
+                                </p>
+                                <a class="btn btn-primary" href="/products/<%=product._id%>">Buy Now</a>
+                            </div>
                 </div>
             </div>
-        </div>
         <% }%>
+    </div>
