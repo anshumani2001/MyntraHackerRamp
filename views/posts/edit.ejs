@@ -1,48 +1,71 @@
-<% layout('layouts/boilerplate') %> 
-    <h1 class="text-center">Edit Post</h1>
+<% layout('layouts/boilerplate') %>
+  <div class="card mb-3">
     <div class="row">
-        <div class="text-left">
-            <div class="col-6 offset-3">
-    <form action="/posts/<%=post._id%>?_method=PUT" method="POST" enctype="multipart/form-data">
-        <div class="mb-3">
-            <label class="form-label" for="description">Description</label>
-            <textarea class="form-control" type="text" id="description" name="post[description]"
-              required><%= post.description %></textarea>
-        </div>
-        <div class="mb-3">
-          <label for="formFileMultiple" class="form-label">Add image(s)</label>
-          <input class="form-control" type="file" id="formFileMultiple" name='image' multiple>
+      <div class="col-md-4">
+
+        <img class="card-img-top" alt=""
+          src="https://assets.myntassets.com/h_1440,q_100,w_1080/v1/assets/images/2334181/2018/6/14/e381c9f4-4ddb-4828-ba51-eb1bcc9628451528967710986-MANGO-MAN-Men-Coats-9291528967710867-1.jpg">
+
       </div>
-      <div class="mb-3">
-        <% post.images.forEach(function(img,i) { %>
-            <img src="<%=img.thumbnail%>" class='img-thumbnail' alt="">
-            <div class="form-check-inline">
-                <input type="checkbox" name="deleteImages[]" id="image-<%=i%>" value="<%=img.filename%>">
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">
+            Edit Post
+          </h5>
+          <form action="/posts/<%=post._id%>?_method=PUT" method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+              <label class="form-label" for="description">Description</label>
+              <textarea class="form-control" type="text" id="description" name="post[description]"
+                required><%= post.description %></textarea>
             </div>
-            <label for="image-<%=i%>">Delete?</label>
-            <% }) %>  
+            <div class="mb-3">
+              <label for="formFileMultiple" class="form-label">Add image(s)</label>
+              <input class="form-control" type="file" id="formFileMultiple" name='image' multiple>
+            </div>
+            <div class="mb-3">
+              <% post.images.forEach(function(img,i) { %>
+                <img src="<%=img.thumbnail%>" class='img-thumbnail' alt="">
+                <div class="form-check-inline">
+                  <input type="checkbox" name="deleteImages[]" id="image-<%=i%>" value="<%=img.filename%>">
+                </div>
+                <label for="image-<%=i%>">Delete?</label>
+                <% }) %>
+            </div>
+            <button class="btn btn-success">Submit</button>
+          </form>
+        </div>
+      </div>
     </div>
-        <button class="btn btn-success">Submit</button>
-        </form>
-     <script>
-        // Example starter JavaScript for disabling form submissions if there are invalid fields
-(function () {
-    'use strict'
-  
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    var forms = document.querySelectorAll('.needs-validation')
-  
-    // Loop over them and prevent submission
-    Array.prototype.slice.call(forms)
-      .forEach(function (form) {
-        form.addEventListener('submit', function (event) {
-          if (!form.checkValidity()) {
-            event.preventDefault()
-            event.stopPropagation()
-          }
-  
-          form.classList.add('was-validated')
-        }, false)
-      })
-  })()
-    </script>
+  </div>
+  <style>
+    body {
+        background-color: #e9ecef;
+        background-image: url("https://images.unsplash.com/photo-1589782182392-46a60064f5d4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1632&q=80");
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+
+    }
+</style>
+  <script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+      'use strict'
+
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.querySelectorAll('.needs-validation')
+
+      // Loop over them and prevent submission
+      Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+          form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+              event.preventDefault()
+              event.stopPropagation()
+            }
+
+            form.classList.add('was-validated')
+          }, false)
+        })
+    })()
+  </script>
