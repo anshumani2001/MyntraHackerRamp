@@ -1,5 +1,4 @@
-if(process.env.NODE_ENV!='production')
-{
+if (process.env.NODE_ENV != 'production') {
     require('dotenv').config();
 }
 const express = require('express');
@@ -20,13 +19,14 @@ const Chats = require('./models/Chats');
 const { isLoggedIn } = require('./middleware');
 const Product=require('./models/product');
 const multer=require('multer');
-const products = require('./routes/product');
 const userRoutes = require('./routes/users');  
+const products = require('./routes/product');
+const posts = require('./routes/post');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const { findById } = require('./models/comment');
-const {cloudinary,storage}=require('./cloudinary');
-const upload=multer({storage})
+const { cloudinary, storage } = require('./cloudinary');
+const upload = multer({ storage })
 const dbUrl = 'mongodb://localhost:27017/hackerramp2';
 
 mongoose.connect(dbUrl, { useNewUrlParser: true });
@@ -84,132 +84,18 @@ app.get('/', (req, res) => {
 
 //Social Media Routes
 
-app.get('/posts', async (req, res) => {
-    const posts = await Post.find({}).populate('author');
-    const users=await User.find({});
-    let visiblePosts = [];
-    for (let post of posts) {
-        if ( req.user && post.author.username == req.user.username && post.author) {
-            visiblePosts.push(post);
-        }
-        else if (post.isPrivate && post.isPrivate == 'Private') {
-            // console.log(post.isPrivate, req.user)
-            if (req.user && post.author.followers.includes(req.user._id)) {
-                visiblePosts.push(post);
-            }
-        } else {
-            visiblePosts.push(post);
-        }
-    }
-    res.render('posts/index', { posts : visiblePosts, users });
-});
-
-app.get('/posts/new', isLoggedIn, (req, res) => {
-    res.render('posts/new')
-})
-
-app.post('/posts',upload.array('image') ,async (req, res) => {  //Post Req
-    const { description,  isPrivate } = req.body;
-    console.log(req.body,req.files);
-    // console.log(description, images)
-    const newPost = new Post({ description,  isPrivate });
-   newPost.images=req.files.map(f=>({url:f.path,filename:f.filename}));
-   newPost.author = req.user._id;
-   await newPost.save();
-    console.log(newPost)
-   req.flash('success', 'Posted the post');
-   res.redirect('/posts')
-    // res.send(req.body);
-    // res.send('Post request after creating a <post>');
-})
-
-app.get('/posts/:id', async (req, res,) => {
-    const post = await Post.findById(req.params.id).populate({
-        path: 'comments',
-        populate: {
-            path: 'author'
-        }
-    }).populate('author');    
-    res.render('posts/show', { post });
-});
-
-app.get('/posts/:id/edit', isLoggedIn, async (req, res) => {
-    const post = await Post.findById(req.params.id);
-    res.render('posts/edit', { post });
-})
-
-app.put('/posts/:id',upload.array('image'), async (req, res) => { //EDIT
-    const { id } = req.params;
-    // console.log(req.body);
-    const post = await Post.findByIdAndUpdate(id, { ...req.body.post });
-    const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
-    post.images.push(...imgs);
-    await post.save();
-    if (req.body.deleteImages) {
-        for (let filename of req.body.deleteImages) {
-            await cloudinary.uploader.destroy(filename);
-        }
-        await post.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } })
-    }
-    req.flash('success', "Post Edited")
-    res.redirect('/posts/' + post._id);
-
-})
-//let counter=1;
-app.get('/posts/:id/like',isLoggedIn,async (req,res)=>{
-    const user=req.user;
-    
-    const {id}=req.params;
-    const post =await Post.findById(id);
-    post.likesCount+=1;
-    //counter*=-1;
-
-    await post.save();
-    res.redirect('/posts/'+id);
-   // console.log(post.likesCount);
-})
-//app.post('/posts/:id/like',)
-
-app.post('/posts/:id/comments', async (req, res) => {
-    //res.send('works');
-    const post = await Post.findById(req.params.id);
-    // console.log(req.body);
-    const comm = new Comment(req.body.comment);
-    comm.author = req.user._id;
-    post.comments.push(comm);
-    await comm.save()
-    await post.save();
-    req.flash('success', 'Comment Added')
-    res.redirect('/posts/' + post.id);
-})
-
-app.delete('/posts/:id/comments/:commentid', async (req, res) => {
-    const { id, commentid } = req.params;
-    await Post.findByIdAndUpdate(id, { $pull: { comments: commentid } });
-    await Comment.findByIdAndDelete(req.params.commentid);
-    req.flash('success', "Comment Deleted");
-    res.redirect('/posts/' + id);
-})
-
-app.delete('/posts/:id', async (req, res) => { //DELETE
-    const { id } = req.params;
-    await Post.findByIdAndDelete(id);
-    req.flash('success', 'Post was deleted');
-    res.redirect('/posts');
-})
-
-
+app.use('/posts', posts);
 
 ///Product Routes 
-app.use('/products',products);
+app.use('/products', products);
 
 //AUTH ROUTES
 
 app.use('/', userRoutes)
 
 
-app.get('/users/:userName', async(req, res) => {
-    var userF = await User.findOne({ username: req.params.userName}).exec();
+app.get('/users/:userName', async (req, res) => {
+    var userF = await User.findOne({ username: req.params.userName }).exec();
     if (userF) {
         // console.log(userF)
         let visiblePosts = [];
@@ -217,7 +103,7 @@ app.get('/users/:userName', async(req, res) => {
         for (let post of posts) {
             // console.log(post.author)
             if (post.author && post.author.username == req.params.userName) {
-                if (req.user && post.author.username == req.user.username && post.author&& req.user) {
+                if (req.user && post.author.username == req.user.username && post.author && req.user) {
                     visiblePosts.push(post);
                 }
                 else if (post.isPrivate && post.isPrivate == 'Private') {
@@ -231,25 +117,25 @@ app.get('/users/:userName', async(req, res) => {
             }
         }
         // console.log(userPosts)
-        
-        res.render('Users/profile', {userF, userPosts: visiblePosts})
+
+        res.render('Users/profile', { userF, userPosts: visiblePosts })
     } else {
         res.send("No such User Exists");
     }
 })
 
 app.get('/users/:userName/followers', isLoggedIn, async (req, res) => {
-    var userF = await User.findOne({ username: req.params.userName}).populate('followers').exec();
+    var userF = await User.findOne({ username: req.params.userName }).populate('followers').exec();
     if (userF) {
-        res.render('Users/followers', {followers : userF.followers});
+        res.render('Users/followers', { followers: userF.followers });
     } else {
         res.send("No such User Exists");
     }
 })
 app.get('/users/:userName/following', isLoggedIn, async (req, res) => {
-    var userF = await User.findOne({ username: req.params.userName}).populate('following').exec();
+    var userF = await User.findOne({ username: req.params.userName }).populate('following').exec();
     if (userF) {
-        res.render('Users/following', {following : userF.following});
+        res.render('Users/following', { following: userF.following });
     } else {
         res.send("No such User Exists");
     }
@@ -272,7 +158,7 @@ app.post('/users/:userName/follow', isLoggedIn, async (req, res) => {
     currUser.save();
     req.flash('success', 'Followed Successfully')
     res.redirect(`/users/${toFollowUsername}`);
-    
+
 })
 
 
@@ -280,7 +166,7 @@ app.get('/chatwith/:id', isLoggedIn, async (req, res) => {
     let currUser = await User.findOne({ username: req.user.username }).populate('myChats.chat').populate('myChats.user').exec();
     let otherUser = await User.findById(req.params.id);
     for (let chat of currUser.myChats) {
-        if (chat.user._id + " " == req.params.id+" ") {
+        if (chat.user._id + " " == req.params.id + " ") {
             res.redirect(`/chat/${chat.chat._id}`)
             // res.send("******");
             return;
@@ -307,7 +193,7 @@ app.get('/chatwith/:id', isLoggedIn, async (req, res) => {
 })
 
 
-app.get('/chat/:id', isLoggedIn, async(req, res) => {
+app.get('/chat/:id', isLoggedIn, async (req, res) => {
     ROOM_ID = req.params.room;
     // res.render('chat', {room: req.params.room})
     var chatF = await Chats.findById(req.params.id).populate('user1').populate('user2').exec();
@@ -324,7 +210,7 @@ io.on('connection', socket => {
     socket.on('join-room', (roomId, userId) => {
         socket.join(roomId);
         socket.to(roomId).emit('user-connected', userId);
-        socket.on('message', async(message) => {
+        socket.on('message', async (message) => {
             console.log(message, "app.js ")
             var newMsg = message
             message.userId = userId
@@ -343,3 +229,5 @@ io.on('connection', socket => {
 server.listen(3000, () => {
     console.log('Serving on port 3000')
 })
+
+
