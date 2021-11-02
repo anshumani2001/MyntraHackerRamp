@@ -27,7 +27,13 @@
                     <img src="https://source.unsplash.com/collection/3356576/1600x900" class="card-img-top" alt="...">
                 <% } %> 
                 <div class="card-body">
-                    <p class="card-text"><%= post.description%></p>
+                    <p class="card-text">
+                        <% if(post.description.length > 250){ %>
+                            <%= post.description.slice(0,250) %>... <a href="/posts/<%= post.id %>"> See More</a>
+                         <% } else { %>
+                            <%= post.description %>
+                         <% } %> 
+                    </p>
                     <a href="/posts/<%= post.id %> " class="btn btn-primary">View Post </a>
                     
                 </div>

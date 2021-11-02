@@ -1,7 +1,7 @@
 <% layout('layouts/boilerplate') %>
 <div class="row">
-    <div class="col-3">
-        <div class="card p-3 mb-2 position-fixed">
+    <div class="col-3" style="justify-content: space-between;">
+        <div class="card p-3 mb-2 position-fixed" >
             <% for(let user of users){ %> 
                 <% if ( currentUser && user._id+' '===currentUser._id+' ') { %>     
                 
@@ -27,8 +27,14 @@
                         <img src="https://source.unsplash.com/collection/3356576/1600x900" class="card-img-top" alt="...">
                     <% } %> 
                     <div class="card-body">
-                        <h5 class="card-title"><a href="/users/<%=post.author.username%> "><%= post.author.firstname + " " + post.author.secondname %> </a> </h5>
-                        <p class="card-text"><%= post.description%></p>
+                        <h5 class="card-title"><a style="text-decoration: none;" href="/users/<%=post.author.username%> "><%= post.author.firstname + " " + post.author.secondname %> </a> </h5>
+                        <p class="card-text">
+                            <% if(post.description.length > 250){ %>
+                                <%= post.description.slice(0,250) %>... <a href="/posts/<%= post.id %>"> See More</a>
+                             <% } else { %>
+                                <%= post.description %>
+                             <% } %> 
+                        </p>
                     </div>
                     <div class="card-body">
                         <a href="/posts/<%= post.id %> " class="btn btn-primary">View Post </a>
