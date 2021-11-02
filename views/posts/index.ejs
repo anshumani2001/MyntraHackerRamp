@@ -1,7 +1,8 @@
 <% layout('layouts/boilerplate') %>
 <div class="row">
     <div class="col-3" style="justify-content: space-between;">
-        <div class="card p-3 mb-2 position-fixed" >
+        <div class="shadow card p-3 mb-2 position-fixed" >
+            <h4> Find a friend </h4>
             <% for(let user of users){ %> 
                 <% if ( currentUser && user._id+' '===currentUser._id+' ') { %>     
                 
@@ -20,7 +21,7 @@
     <% for( let post of posts ) { %>
         <div class="row">
             <div class="col-8">
-                <div class="card mb-3">
+                <div class="card mb-3 border-0 shadow-lg rounded-3">
                     <% if(post.images.length>0){ %> 
                     <img src="<%= post.images[0].url%>" class="card-img-top" alt="...">
                     <% } else { %> 
@@ -52,7 +53,7 @@
         <style>
             body{
                 background-color:#e9ecef;
-                background-image: url("https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80");
+                background-image: url("https://images.unsplash.com/photo-1526857240824-92be52581d9b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80");
                 background-repeat: no-repeat;
                 background-attachment: fixed;
                 background-size: cover;
