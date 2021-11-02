@@ -1,24 +1,49 @@
 <% layout('layouts/boilerplate')%>
-<div class="row">
-    <h1 class="text-center">Add a Product</h1>
-    <div class="col-md-6 offset-md-3">
-        <form action="/products" method="POST" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label for="name" class="form-label">Name:</label>
-                <input class="form-control" type="text" name="name" id="name" required autofocus>
+
+<div class="card mb-3">
+    <div class="row">
+        <div class="col-md-4">
+            
+                    <img class="card-img-top" alt=""
+                        src="https://assets.myntassets.com/h_1440,q_100,w_1080/v1/assets/images/2334181/2018/6/14/e381c9f4-4ddb-4828-ba51-eb1bcc9628451528967710986-MANGO-MAN-Men-Coats-9291528967710867-1.jpg">
+                  
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title">
+                   Add a Product 
+                </h5>
+                
+                <form action="/products" method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name:</label>
+                        <input class="form-control" type="text" name="name" id="name" required autofocus>
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price(INR):</label>
+                        <input class="form-control" type="number" name="price" id="price" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="formFileMultiple" class="form-label">Add image(s)</label>
+                        <input class="form-control" type="file" id="formFileMultiple" name='image' multiple>
+                    </div>
+                    <div class="mb-3">
+                        <button class="btn btn-success">Add Product</button>
+                    </div>
+                </form>
+                <a href="/products">All Products</a>
             </div>
-            <div class="mb-3">
-                <label for="price" class="form-label">Price(INR):</label>
-                <input class="form-control" type="number" name="price" id="price" required>
-            </div>
-            <div class="mb-3">
-                <label for="formFileMultiple" class="form-label">Add image(s)</label>
-                <input class="form-control" type="file" id="formFileMultiple" name='image' multiple>
-            </div>
-            <div class="mb-3">
-                <button class="btn btn-success">Add Product</button>
-            </div>
-        </form>
-        <a href="/products">All Products</a>
+        </div>
     </div>
 </div>
+
+    <style>
+        body {
+            background-color: #e9ecef;
+            background-image: url("https://images.unsplash.com/photo-1589782182392-46a60064f5d4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1632&q=80");
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+
+        }
+    </style>
