@@ -85,6 +85,7 @@ app.get('/', (req, res) => {
 
 app.get('/posts', async (req, res) => {
     const posts = await Post.find({}).populate('author');
+    const users=await User.find({});
     let visiblePosts = [];
     for (let post of posts) {
         if ( req.user && post.author.username == req.user.username && post.author) {
@@ -99,7 +100,7 @@ app.get('/posts', async (req, res) => {
             visiblePosts.push(post);
         }
     }
-    res.render('posts/index', { posts : visiblePosts });
+    res.render('posts/index', { posts : visiblePosts, users });
 });
 
 app.get('/posts/new', isLoggedIn, (req, res) => {
@@ -401,11 +402,6 @@ app.post('/users/:userName/follow', isLoggedIn, async (req, res) => {
     req.flash('success', 'Followed Successfully')
     res.redirect(`/users/${toFollowUsername}`);
     
-})
-
-app.get('/users',isLoggedIn,async (req,res)=>{
-    const users=await User.find({});
-    res.render('Users/meet',{users});
 })
 
 app.get('/logout', (req, res) => {
