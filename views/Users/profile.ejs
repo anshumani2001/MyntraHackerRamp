@@ -1,11 +1,9 @@
 <% layout('layouts/boilerplate') %>
 
     <h1><%= userF.firstname + " " + userF.secondname %></h1>  
-    <form class="mb-3 d-inline" action="/users/<%=userF.username%>/followers" method="GET">
-        <button class="btn btn-primary btn-sm">Followers</button> 
-    </form>
+    
     <form class="mb-3 d-inline" action="/users/<%=userF.username%>/following" method="GET">
-        <button class="btn btn-secondary btn-sm">Following</button> 
+        <button class="btn btn-primary btn-sm">Connections</button> 
     </form>
     <% if((currentUser && userF.username != currentUser.username) || (!currentUser)){ %>
     <form class="mb-3 d-inline" action="/chatWith/<%=userF._id%>" method="GET">

@@ -66,9 +66,12 @@ router.get('/:userName/followers', isLoggedIn, async (req, res) => {
     }
 })
 router.get('/:userName/following', isLoggedIn, async (req, res) => {
-    var userF = await User.findOne({ username: req.params.userName }).populate('following').exec();
+    var userF = await User.findOne({ username: req.params.userName })
+    .populate('following')
+    .populate('followers')
+    .exec();
     if (userF) {
-        res.render('Users/following', { following: userF.following });
+        res.render('Users/following', { following: userF.following,followers:userF.followers });
     } else {
         res.send("No such User Exists");
     }

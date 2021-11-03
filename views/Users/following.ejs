@@ -1,6 +1,53 @@
 <% layout('layouts/boilerplate') %>
-<h1>Following</h1>
-<% for(let user of following){ %> 
-    <div><a href="/users/<%=user.username%> "><%=user.firstname + " " + user.secondname%> </a>
+<h1>Connections</h1>
+<br>
+
+<div class="row">
+    <div class="col-6">
+        <h4>Following</h4>
+    <% for(let user of following){ %> 
+        <div class="mb-3">
+          <div class="card" style="width: 18rem;">
+              <div class="card-body">
+                <h5 class="card-title"><%=user.firstname + " " + user.secondname%></h5>
+                
+                <a href="/users/<%=user.username%>" class="btn btn-info">View Profile </a>
+              
+              </div>
+            </div>
+        </div>
+        <% } %> 
+</div>
+
+
+   
+  
+   
+
+   
+    
+
+    <div class="col-6">
+        <h4>Followers</h4>
+        <% for(let user of followers){ %> 
+            <div class="mb-3">
+              <div class="card" style="width: 18rem;">
+                  <div class="card-body">
+                    <h5 class="card-title"><%=user.firstname + " " + user.secondname%></h5>
+                    
+                    <a href="/users/<%=user.username%>" class="btn btn-info">View Profile </a>
+                  
+                  </div>
+                </div>
+            </div>
+            <% } %> 
     </div>
-<% } %> 
+    
+ 
+    </div>
+
+
+   
+  
+   
+
