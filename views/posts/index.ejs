@@ -1,7 +1,7 @@
 <% layout('layouts/boilerplate') %>
 <div class="row">
     <div class="col-3" style="justify-content: space-between;">
-        <div class="shadow card p-3 mb-2 position-fixed" >
+        <div class="shadow card p-3 mb-2 position-static" >
             <h4> Find a friend </h4>
             <% for(let user of users){ %> 
                 <% if ( currentUser && user._id+' '===currentUser._id+' ') { %>     
@@ -20,7 +20,7 @@
     <div class="col-9">
     <% for( let post of posts ) { %>
         <div class="row">
-            <div class="col-8">
+            <div class="col-lg-8">
                 <div class="card mb-3 border-0 shadow-lg rounded-3 tran">
                     <% if(post.images.length>0){ %> 
                     <img src="<%= post.images[0].url%>" class="card-img-top" alt="...">
