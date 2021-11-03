@@ -19,7 +19,8 @@ const Chats = require('./models/Chats');
 const { isLoggedIn } = require('./middleware');
 const Product=require('./models/product');
 const multer=require('multer');
-const userRoutes = require('./routes/users');  
+const userRoutes = require('./routes/users'); 
+const users=require('./routes/follow'); 
 const products = require('./routes/product');
 const posts = require('./routes/post');
 const passport = require('passport');
@@ -93,73 +94,10 @@ app.use('/products', products);
 
 app.use('/', userRoutes)
 
+//User Routes
 
-app.get('/users/:userName', async (req, res) => {
-    var userF = await User.findOne({ username: req.params.userName }).exec();
-    if (userF) {
-        // console.log(userF)
-        let visiblePosts = [];
-        const posts = await Post.find({}).populate('author');
-        for (let post of posts) {
-            // console.log(post.author)
-            if (post.author && post.author.username == req.params.userName) {
-                if (req.user && post.author.username == req.user.username && post.author && req.user) {
-                    visiblePosts.push(post);
-                }
-                else if (post.isPrivate && post.isPrivate == 'Private') {
-                    // console.log(post.isPrivate, req.user)
-                    if (req.user && post.author.followers.includes(req.user._id)) {
-                        visiblePosts.push(post);
-                    }
-                } else {
-                    visiblePosts.push(post);
-                }
-            }
-        }
-        // console.log(userPosts)
+app.use('/users',users);
 
-        res.render('Users/profile', { userF, userPosts: visiblePosts })
-    } else {
-        res.send("No such User Exists");
-    }
-})
-
-app.get('/users/:userName/followers', isLoggedIn, async (req, res) => {
-    var userF = await User.findOne({ username: req.params.userName }).populate('followers').exec();
-    if (userF) {
-        res.render('Users/followers', { followers: userF.followers });
-    } else {
-        res.send("No such User Exists");
-    }
-})
-app.get('/users/:userName/following', isLoggedIn, async (req, res) => {
-    var userF = await User.findOne({ username: req.params.userName }).populate('following').exec();
-    if (userF) {
-        res.render('Users/following', { following: userF.following });
-    } else {
-        res.send("No such User Exists");
-    }
-})
-
-app.post('/users/:userName/follow', isLoggedIn, async (req, res) => {
-    const toFollowUsername = req.params.userName;
-    const toFollow = await User.findOne({ username: toFollowUsername }).exec();
-    const currUser = await User.findOne({ username: req.user.username }).populate('following').exec();
-    // console.log(currUser.following)
-    for (let iam of currUser.following) {
-        if (iam.username == toFollowUsername) {
-            req.flash('error', 'Already following')
-            return res.redirect(`/users/${toFollowUsername}`)
-        }
-    }
-    toFollow.followers.push(currUser);
-    toFollow.save();
-    currUser.following.push(toFollow);
-    currUser.save();
-    req.flash('success', 'Followed Successfully')
-    res.redirect(`/users/${toFollowUsername}`);
-
-})
 
 
 app.get('/chatwith/:id', isLoggedIn, async (req, res) => {
