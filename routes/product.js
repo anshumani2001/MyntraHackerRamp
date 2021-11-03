@@ -3,6 +3,7 @@ const app=express();
 const mongoose=require('mongoose');
 const router=express.Router();
 const Product=require('../models/product');
+const Post=require('../models/post');
 const {isLoggedIn}=require('../middleware');
 const multer=require('multer');
 const {cloudinary,storage}=require('../cloudinary');
