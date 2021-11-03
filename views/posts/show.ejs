@@ -24,18 +24,29 @@
               <div class="card mb-3">
             <div class="card-body">
                 <p class="card-text"><%= post.description  %> </h5>
-                    <form action="/posts/<%=post._id%>/like" method="GET">
+                    <form class="mb-3 d-inline" action="/posts/<%=post._id%>/like" method="GET">
                         <button class="btn btn-primary">Like</button>
                     </form>
                     <% if(post.product) {%>
-                                <form action="/products/<%=post.product._id%>" method="GET">
+                                <form class="mb-3 d-inline" action="/products/<%=post.product._id%>" method="GET">
                                     <button class="btn btn-dark">See Product</button>
                                 </form>
                     <%}%>
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item text-muted">Likes: <%=post.likesCount %> </li>
-                <li class="list-group-item">Posted by <a href="/users/<%= post.author.username %>"><%= post.author.firstname + " " + post.author.secondname %></a></li>
+                <li class="list-group-item">Posted by <a href="/users/<%= post.author.username %>"><%= post.author.firstname + " " + post.author.secondname %></a>&ensp;<% if((currentUser && post.author.username != currentUser.username) || (!currentUser)){ %>
+                    <form class="mb-3 d-inline" action="/chatWith/<%=post.author._id%>" method="GET">
+                        <button class="btn btn-dark btn-sm">Chat</button> 
+                    </form>
+                    <form class="mb-3 d-inline" action="/users/<%=post.author.username%>/follow" method="POST">
+                        <button class="btn btn-success btn-sm">Follow </button>
+                    </form>
+                
+                <br>
+                <%}%>
+                
+                </li>
                 
             </ul>
             <%  if( currentUser && post.author.equals(currentUser._id))  {%>
@@ -48,12 +59,16 @@
                 </div>
                 <% } %>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item"> <a href="https://wa.me/?text=/posts/<%=post._id%>" data-action="share/whatsapp/share" class="text-decoration-none">
-                        <button class="btn btn-success d-inline">Share via Whatsapp</button>  
+                    
+                    <li class="list-group-item"><p style="font-size: large; margin-bottom: 0%;"> Share Via :</p> <a href="https://wa.me/?text=/posts/<%=post._id%>" data-action="share/whatsapp/share" class="text-decoration-none" style="color: #25D366;">
+                        <i class="fab fa-whatsapp-square fa-3x"></i>
                     </a> 
-                    <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.google.co.in/" target="_blank" class="text-decoration-none">
-                        <button class="btn btn-primary d-inline">Share via Facebook</button>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.google.co.in/" target="_blank" class="text-decoration-none" style="color: #4267B2;">
+                        <!-- <i class="fab fa-facebook"></i> -->
+                        <i class="fab fa-facebook-square fa-3x"></i>
+                        <!-- <button class="btn btn-primary d-inline">Share via Facebook</button> -->
                     </a>
+                    
                 </li>
                 </ul>    
                     
