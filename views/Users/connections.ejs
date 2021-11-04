@@ -7,7 +7,7 @@
         <h4>Following</h4>
     <% for(let user of following){ %> 
         <div class="mb-3">
-          <div class="card" style="width: 18rem;">
+          <div class="card tran" style="width: 18rem;">
               <div class="card-body">
                 <h5 class="card-title"><%=user.firstname + " " + user.secondname%></h5>
                 
@@ -31,7 +31,7 @@
         <h4>Followers</h4>
         <% for(let user of followers){ %> 
             <div class="mb-3">
-              <div class="card" style="width: 18rem;">
+              <div class="card tran" style="width: 18rem;">
                   <div class="card-body">
                     <h5 class="card-title"><%=user.firstname + " " + user.secondname%></h5>
                     
@@ -45,6 +45,18 @@
     
  
     </div>
+
+    <style>
+      body{
+          background-color:#e9ecef;
+          background-image: url("https://images.pexels.com/photos/414660/pexels-photo-414660.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
+          background-repeat: no-repeat;
+          background-attachment: fixed;
+          background-size: cover;
+          height: 500px;
+      }
+      
+  </style>
 
 
    
