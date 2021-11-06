@@ -100,7 +100,7 @@
     <div class="card mb-3 ">
         <div class="card-body">
             <h5 class="card-title"> <a href="/users/<%= post.author.username %>"><%= comment.author.firstname + " " + comment.author.secondname %></a></h5>
-            <p class="card-text">comment: <%= comment.body %></p>
+            <p class="card-text"><%= comment.body %></p>
             <%  if( currentUser && comment.author.equals(currentUser._id))  {%>
             <form action ="/posts/<%=post._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST">
                 <button class="btn btn-danger">Delete</button>
