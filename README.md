@@ -51,7 +51,7 @@ User can run the code using the following steps
 
 
 
-### The User can register/login 
+### The User can Register/Login 
 
 The authorization was implemented using Passport.js 
 
@@ -66,7 +66,7 @@ The authorization was implemented using Passport.js
 
 
 
-### The Users can add new Post/edit existing posts 
+### The Users can add new Post/Edit existing posts 
 
 
 
