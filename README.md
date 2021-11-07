@@ -83,3 +83,9 @@ The authorization was implemented using Passport.js
 
 ![WhatsApp Image 2021-11-07 at 6 17 19 PM](https://user-images.githubusercontent.com/86730045/140645571-316d4727-fedf-4086-a2aa-fb79f3f9290f.jpeg)
 
+### The Users Can follow other users and  chat with them 
+
+![WhatsApp Image 2021-11-07 at 6 22 32 PM](https://user-images.githubusercontent.com/86730045/140645771-df44085e-b30a-4b3f-8ea1-ec68f85a1400.jpeg)
+
+![WhatsApp Image 2021-11-07 at 6 22 57 PM](https://user-images.githubusercontent.com/86730045/140645772-7c249462-f851-447c-b548-4673b995937a.jpeg)
+
