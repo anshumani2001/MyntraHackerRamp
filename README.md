@@ -47,7 +47,6 @@ User can run the code using the following steps
 
 
 
-![Screenshot 2021-11-07 at 12 32 34 PM](https://user-images.githubusercontent.com/86730045/140635807-11200f20-7a62-4adf-be7c-a5fccac69b80.png)
 
 
 
