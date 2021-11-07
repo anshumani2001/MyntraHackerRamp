@@ -46,6 +46,7 @@ User can run the code using the following steps
 ### Home Page 
 
 
+![WhatsApp Image 2021-11-07 at 6 00 26 PM (2)](https://user-images.githubusercontent.com/86730045/140645368-e086cc7c-1666-4ca5-bfbf-3a97e351c760.jpeg)
 
 
 
@@ -55,22 +56,30 @@ User can run the code using the following steps
 The authorization was implemented using Passport.js 
 
 
-![Screenshot 2021-11-07 at 12 36 52 PM](https://user-images.githubusercontent.com/86730045/140635893-89a6a249-1186-4e2d-8589-542856eaa3fd.png)
+![WhatsApp Image 2021-11-07 at 5 58 31 PM](https://user-images.githubusercontent.com/86730045/140645396-4e2d08a6-4997-4507-a9de-d5917ce7896b.jpeg)
 
 
 
+![WhatsApp Image 2021-11-07 at 5 58 14 PM](https://user-images.githubusercontent.com/86730045/140645424-48464bd0-d0c7-4a1b-95b4-ee7c80170fac.jpeg)
 
 
-![Screenshot 2021-11-07 at 12 37 12 PM](https://user-images.githubusercontent.com/86730045/140635865-bdaef464-deb1-43c7-8148-f31b671b7517.png)
+
 
 
 ### The Users can add new Post/edit existing posts 
 
 
-![Screenshot 2021-11-07 at 12 41 19 PM](https://user-images.githubusercontent.com/86730045/140635962-fe7b9799-761b-41ac-8a41-682ad1957b1f.png)
+
+![WhatsApp Image 2021-11-07 at 5 58 58 PM](https://user-images.githubusercontent.com/86730045/140645504-24611616-8c7c-4b02-bd03-bf95996fa073.jpeg)
 
 
-![Screenshot 2021-11-07 at 12 42 59 PM](https://user-images.githubusercontent.com/86730045/140636010-bfcfdd91-59fa-4f7c-a7c4-9ef5faa89f9e.png)
+![WhatsApp Image 2021-11-07 at 5 59 19 PM](https://user-images.githubusercontent.com/86730045/140645535-6ba9a891-783b-4717-b458-15b8a7696afe.jpeg)
 
 
+![WhatsApp Image 2021-11-07 at 6 18 14 PM](https://user-images.githubusercontent.com/86730045/140645609-3c709ded-94dd-4714-8fba-64e533e49d0d.jpeg)
+
+### Users Can like the post leave a comment share the posts 
+
+
+![WhatsApp Image 2021-11-07 at 6 17 19 PM](https://user-images.githubusercontent.com/86730045/140645571-316d4727-fedf-4086-a2aa-fb79f3f9290f.jpeg)
 
