@@ -1,7 +1,45 @@
 # MyntraHackerRamp Round 2 Submission
 
+## About the Project
+
 A website that links E-Commerce and Social media together that allows users to add posts and link it with products on the website 
 
+We used MongoDB schemas to link together the product and post schemas
+This will enable the user to view the product of their liking directly from the post.
+We have implemented a system wherein the users can follow other users to view their private posts.
+The users can like the posts, leave a comment and share.
+We used socket.io to send real time messages between users. 
+The authorization and authentication system was implemented with the help of passport.js
+There is also a feature to sort all the products by price and delivery time. 
+
+
+## Tech Stack 
+
+* HTML/CSS 
+*  EJS
+* Bootstrap
+* JavaScript
+* Node.JS
+* Express
+* MongoDB
+* Passport.JS
+* Socket.io
+* Cloudinary
+
+## Requirements 
+
+In order to run this project on the local machine the user must have 
+
+* node.js version 14.15.4
+* mongod 
+
+## How to run 
+User can run the code using the following steps 
+
+* Clone the Repository
+* Go to VS Code and in the terminal run npm install
+* run the command node app.js
+ 
 ## Features 
 
 ### Home Page 
